@@ -1,5 +1,6 @@
 package sameuelesimeone.FitWell.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,11 @@ public class Workout {
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
     private List<Set> sets;
+
+    @ManyToOne
+    @JoinColumn(name = "card_id")
+    @JsonIgnore
+    private CardWorkout cardWorkout;
 
     public Workout(Exercise exercise, List<Set> sets) {
         this.exercise = exercise;

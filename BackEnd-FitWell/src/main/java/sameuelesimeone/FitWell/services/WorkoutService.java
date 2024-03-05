@@ -3,6 +3,7 @@ package sameuelesimeone.FitWell.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sameuelesimeone.FitWell.dao.SetDAO;
 import sameuelesimeone.FitWell.dao.WorkoutDAO;
 import sameuelesimeone.FitWell.dto.WorkoutDTO;
 import sameuelesimeone.FitWell.exceptions.NotFoundException;
@@ -26,10 +27,18 @@ public class WorkoutService {
     @Autowired
     SetService setService;
 
+    @Autowired
+    SetDAO setDAO;
+
     public Workout save(WorkoutDTO workout){
         Exercise exercise = exerciseService.findById(UUID.fromString(workout.exerciseId()));
         List<Set> setList = workout.setId().stream().map(el -> setService.findById(UUID.fromString(el))).toList();
-        return workoutDAO.save(new Workout(exercise, setList));
+        Workout newWorkout = workoutDAO.save(new Workout(exercise, setList));
+        setList.forEach(el -> {
+            el.setWorkout(newWorkout);
+            setDAO.save(el);
+        });
+        return newWorkout;
     }
 
     public Workout findByID(UUID id){

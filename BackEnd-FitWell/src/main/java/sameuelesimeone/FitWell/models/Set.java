@@ -23,6 +23,7 @@ public class Set {
 
     @ManyToOne
     @JoinColumn(name = "workout_id")
+    @JsonIgnore
     private Workout workout;
 
     public Set(int rep, double weight) {
