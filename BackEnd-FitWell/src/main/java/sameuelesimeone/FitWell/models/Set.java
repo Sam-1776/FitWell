@@ -1,8 +1,7 @@
 package sameuelesimeone.FitWell.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +20,10 @@ public class Set {
     private UUID id;
     private int rep;
     private double weight;
+
+    @ManyToOne
+    @JoinColumn(name = "workout_id")
+    private Workout workout;
 
     public Set(int rep, double weight) {
         this.rep = rep;

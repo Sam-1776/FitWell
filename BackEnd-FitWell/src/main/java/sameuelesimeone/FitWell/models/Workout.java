@@ -21,8 +21,8 @@ public class Workout {
     private UUID id;
     @OneToOne
     private Exercise exercise;
-    @OneToMany
-    @JoinColumn(name = "sets")
+
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
     private List<Set> sets;
 
     public Workout(Exercise exercise, List<Set> sets) {
