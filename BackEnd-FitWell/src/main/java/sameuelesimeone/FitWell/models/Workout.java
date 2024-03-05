@@ -21,7 +21,7 @@ public class Workout {
     private UUID id;
     @OneToOne
     private Exercise exercise;
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "sets")
     private List<Set> sets;
 
