@@ -3,6 +3,7 @@ package sameuelesimeone.FitWell.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sameuelesimeone.FitWell.dao.ExerciseDAO;
+import sameuelesimeone.FitWell.exceptions.NotFoundException;
 import sameuelesimeone.FitWell.models.Esercizio;
 import sameuelesimeone.FitWell.models.Exercise;
 
@@ -19,5 +20,9 @@ public class ExerciseService {
     public boolean presenceOfRecords(){
         if (exerciseDAO.count() > 0) return true;
         return false;
+    }
+
+    public Exercise findByName(String name){
+        return exerciseDAO.findByName(name);
     }
 }
