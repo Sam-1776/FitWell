@@ -7,6 +7,7 @@ import sameuelesimeone.FitWell.dao.CardWorkoutDAO;
 import sameuelesimeone.FitWell.dao.UserDAO;
 import sameuelesimeone.FitWell.dao.WorkoutDAO;
 import sameuelesimeone.FitWell.dto.CardWorkoutDTO;
+import sameuelesimeone.FitWell.dto.GenerateCardDTO;
 import sameuelesimeone.FitWell.exceptions.BadRequestException;
 import sameuelesimeone.FitWell.models.CardWorkout;
 import sameuelesimeone.FitWell.models.Role;
@@ -64,5 +65,11 @@ public class CardWorkoutService {
 
         return newCard;
     }
+
+    public CardWorkout generateCard(GenerateCardDTO generateCardDTO){
+
+    }
+
+
 
 }

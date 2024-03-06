@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sameuelesimeone.FitWell.dao.SetDAO;
 import sameuelesimeone.FitWell.dao.WorkoutDAO;
+import sameuelesimeone.FitWell.dto.GenerateCardDTO;
 import sameuelesimeone.FitWell.dto.WorkoutDTO;
 import sameuelesimeone.FitWell.exceptions.NotFoundException;
 import sameuelesimeone.FitWell.models.Exercise;
@@ -43,5 +44,43 @@ public class WorkoutService {
 
     public Workout findByID(UUID id){
         return workoutDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
+    public List<Workout> generateWorkout(GenerateCardDTO generateCardDTO){
+        List<Workout> workoutList = new ArrayList<>();
+        switch (generateCardDTO.partMuscle().toLowerCase()){
+            case"upper": // petto spalle tricipite
+
+                break;
+            case"back": // dorso trapezio bicipite
+                break;
+            case"lower": // quadricipiti femorali adduttori e abduttori polpacci
+                break;
+            case "total": // petto dorso spalle quadricipite femorali addome
+                break;
+            case "warm": // per tipo cardio poly
+                for (int i = 0; i < 5; i++) {
+                    Exercise exercise = exerciseService.findByType(generateCardDTO.type());
+                    List<Set> setList = new ArrayList<>();
+                    setList.add(setService.BodyWeight(generateCardDTO.weight()));
+                    Workout newWorkout = new Workout(exercise, setList);
+                    workoutList.add(newWorkout);
+                }
+                break;
+        }
+        return workoutList;
+    }
+
+    public Workout generateByExp(String exp, ){
+        switch (exp.toLowerCase()){
+            case "low":
+
+                break;
+            case "mid":
+                break;
+            case "high":
+                break;
+        }
+        return
     }
 }

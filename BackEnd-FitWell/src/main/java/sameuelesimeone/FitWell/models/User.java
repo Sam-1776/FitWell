@@ -1,6 +1,8 @@
 package sameuelesimeone.FitWell.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,14 @@ import java.util.UUID;
 @Setter
 @ToString
 @NoArgsConstructor
+@JsonIgnoreProperties({
+        "password"
+        , "credentialsNonExpired"
+        , "accountNonExpired"
+        , "authorities"
+        , "username"
+        , "accountNonLocked"
+        , "enabled"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -35,7 +45,7 @@ public class User implements UserDetails {
     private String avatar;
     @Enumerated(EnumType.STRING)
     private List<Role> role;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CardWorkout> workouts;
 //    private List<Diet> diets;
 //    private NoteBookD noteBookD;
