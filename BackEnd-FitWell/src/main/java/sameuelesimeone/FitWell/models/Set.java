@@ -24,6 +24,7 @@ public class Set {
     @ManyToOne
     @JoinColumn(name = "workout_id")
     @JsonIgnore
+    @ToString.Exclude
     private Workout workout;
 
     public Set(int rep, double weight) {

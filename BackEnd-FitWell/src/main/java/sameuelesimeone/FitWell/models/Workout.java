@@ -20,7 +20,8 @@ public class Workout {
     @Id
     @GeneratedValue
     private UUID id;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "exercise_id")
     private Exercise exercise;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
@@ -34,5 +35,15 @@ public class Workout {
     public Workout(Exercise exercise, List<Set> sets) {
         this.exercise = exercise;
         this.sets = sets;
+    }
+
+    @Override
+    public String toString() {
+        return "Workout{" +
+                "id=" + id +
+                ", exercise=" + exercise.getName() +
+                ", sets=" + sets +
+                ", cardWorkout=" + cardWorkout +
+                '}';
     }
 }

@@ -2,12 +2,12 @@ package sameuelesimeone.FitWell.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import sameuelesimeone.FitWell.dto.CardWorkoutDTO;
+import sameuelesimeone.FitWell.dto.GenerateCardDTO;
 import sameuelesimeone.FitWell.models.CardWorkout;
+import sameuelesimeone.FitWell.models.User;
 import sameuelesimeone.FitWell.services.CardWorkoutService;
 
 @RestController
@@ -19,7 +19,13 @@ public class CardWorkoutController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CardWorkout save(CardWorkoutDTO cardWorkoutDTO){
+    public CardWorkout save(@RequestBody CardWorkoutDTO cardWorkoutDTO){
         return cardWorkoutService.save(cardWorkoutDTO);
+    }
+
+    @PostMapping("/generate")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CardWorkout generateCard(@RequestBody GenerateCardDTO generateCardDTO, @AuthenticationPrincipal User acctualUser){
+        return cardWorkoutService.generateCard(generateCardDTO, acctualUser.getId());
     }
 }
