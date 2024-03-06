@@ -12,12 +12,10 @@ public class MailgunSender {
     private String domainName;
     private String mailGunAPIKey;
 
-    private String mailFeed;
 
-    public MailgunSender(@Value("${mailgun.apikey}") String mailGunAPIKey, @Value("${mailgun.domain}") String domainName, @Value("${mailgun.feed}") String mailFeed) {
+    public MailgunSender(@Value("${mailgun.apikey}") String mailGunAPIKey, @Value("${mailgun.domain}") String domainName) {
         this.mailGunAPIKey = mailGunAPIKey;
         this.domainName = domainName;
-        this.mailFeed = mailFeed;
     }
 
     public void sendRegistrationEmail(User userRegister){
