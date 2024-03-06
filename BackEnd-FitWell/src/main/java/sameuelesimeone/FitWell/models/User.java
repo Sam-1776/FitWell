@@ -25,6 +25,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @JsonIgnoreProperties({
         "password"
+        , "workouts"
         , "credentialsNonExpired"
         , "accountNonExpired"
         , "authorities"

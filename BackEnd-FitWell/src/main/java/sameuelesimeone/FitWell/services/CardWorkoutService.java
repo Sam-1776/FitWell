@@ -66,8 +66,22 @@ public class CardWorkoutService {
         return newCard;
     }
 
-    public CardWorkout generateCard(GenerateCardDTO generateCardDTO){
-
+    public CardWorkout generateCard(GenerateCardDTO generateCardDTO, UUID id){
+        System.out.println(generateCardDTO.partMuscle());
+        List<Workout> workoutList = workoutService.generateWorkout(generateCardDTO);
+        System.out.println(workoutList);
+        User acctualUser = userService.findById(id);
+        CardWorkout newCard = cardWorkoutDAO.save(new CardWorkout(generateCardDTO.name(), workoutList, 60, acctualUser));
+        workoutList.forEach(el -> {
+            el.setCardWorkout(newCard);
+            workoutDAO.save(el);
+        });
+        List<CardWorkout> cardWorkoutList = new ArrayList<>();
+        cardWorkoutList.addAll(acctualUser.getWorkouts());
+        cardWorkoutList.add(newCard);
+        acctualUser.setWorkouts(cardWorkoutList);
+        userDAO.save(acctualUser);
+        return newCard;
     }
 
 

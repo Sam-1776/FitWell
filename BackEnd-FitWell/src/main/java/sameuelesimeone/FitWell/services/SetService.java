@@ -29,27 +29,27 @@ public class SetService {
     }
 
     public Set generateLowSet(){
-        return setDAO.save(new Set(3, random.nextDouble(2.5, 8.0)));
+        return setDAO.save(new Set(8, random.nextDouble(2.5, 8.0)));
     }
 
     public Set generateMidSet(){
-        return setDAO.save(new Set(4, random.nextDouble(10.0,30.0)));
+        return setDAO.save(new Set(10, random.nextDouble(10.0,30.0)));
     }
 
     public Set generateHighSet(){
-        return setDAO.save(new Set(4, random.nextDouble(32.0,55.0)));
+        return setDAO.save(new Set(12, random.nextDouble(32.0,55.0)));
     }
 
     public Set generateLowSetLeg(double weight){
-        return setDAO.save(new Set(3, weight+random.nextDouble(2.5, 8.0)));
+        return setDAO.save(new Set(8, weight+random.nextDouble(2.5, 8.0)));
     }
 
     public Set generateMidSetLeg(double weight){
-        return setDAO.save(new Set(4, weight+random.nextDouble(10.0,30.0)));
+        return setDAO.save(new Set(10, weight+random.nextDouble(10.0,30.0)));
     }
 
     public Set generateHighSetLeg(double weight){
-        return setDAO.save(new Set(4, weight+random.nextDouble(32.0,55.0)));
+        return setDAO.save(new Set(12, weight+random.nextDouble(32.0,55.0)));
     }
 
     public Set BodyWeight(double weight){
