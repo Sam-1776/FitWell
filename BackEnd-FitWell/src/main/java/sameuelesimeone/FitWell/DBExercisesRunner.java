@@ -5,10 +5,7 @@ import org.hibernate.annotations.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import sameuelesimeone.FitWell.models.Esercizio;
-import sameuelesimeone.FitWell.models.Exercise;
-import sameuelesimeone.FitWell.models.Muscle;
-import sameuelesimeone.FitWell.models.Type;
+import sameuelesimeone.FitWell.models.*;
 import sameuelesimeone.FitWell.services.ExerciseService;
 
 import java.net.http.HttpClient;
@@ -67,12 +64,21 @@ public class DBExercisesRunner implements CommandLineRunner {
                 "STRONGMAN"
         };
 
+        String[] expList={
+                "BEGINNER",
+                "INTERMEDIATE",
+                "EXPERT"
+        };
+
         if (!exerciseService.presenceOfRecords()){
             for (String muscle : muscleTypes) {
                 takeAll(muscle);
             }
             for (String type : typeList) {
                 takeAllByType(type);
+            }
+            for (String exp : expList) {
+                takeAllByExp(exp);
             }
         }
 
@@ -103,7 +109,8 @@ public class DBExercisesRunner implements CommandLineRunner {
                 Exercise newExercise = new Exercise(esercizio.getName(), esercizio.getInstructions());
                 Exercise exerciseSetMuscle = setMuscle(newExercise, muscle);
                 Exercise exerciseSetType = setType(exerciseSetMuscle, esercizio.getType());
-                exerciseService.save(exerciseSetType);
+                Exercise exerciseSetExp = setExp(exerciseSetType, esercizio.getDifficulty());
+                exerciseService.save(exerciseSetExp);
             }
         }
     }
@@ -133,10 +140,58 @@ public class DBExercisesRunner implements CommandLineRunner {
                     Exercise newExercise = new Exercise(esercizio.getName(), esercizio.getInstructions());
                     Exercise exerciseSetMuscle = setMuscle(newExercise, esercizio.getMuscle());
                     Exercise exerciseSetType = setType(exerciseSetMuscle, type);
-                    exerciseService.save(exerciseSetType);
+                    Exercise exerciseSetExp = setExp(exerciseSetType, esercizio.getDifficulty());
+                    exerciseService.save(exerciseSetExp);
                 }
             }
         }
+    }
+
+    public void takeAllByExp(String exp) throws IOException, InterruptedException, URISyntaxException {
+        HttpClient client = HttpClient
+                .newBuilder()
+                .version(Version.HTTP_2)
+                .build();
+
+        for (int i = 0; i < 3; i++) {
+            Builder builder = HttpRequest.newBuilder(new URI("https://api.api-ninjas.com/v1/exercises?difficulty=" + exp + "&offset=" + i));
+            HttpRequest httpRequest = builder.GET().header("X-Api-Key", "5KLG+fGD3EMDyNgTaOM2VQ==S8OaC358eBuDcifj").build();
+
+            BodyHandler<String> bodyHandler = HttpResponse.BodyHandlers.ofString();
+            HttpResponse<String> httpResponse = client.send(httpRequest, bodyHandler);
+
+            // Deserializzazione del JSON in un array di oggetti Esercizio
+            Gson gson = new Gson();
+            Esercizio[] esercizi = gson.fromJson(httpResponse.body(), Esercizio[].class);
+
+
+            // Ora puoi lavorare con l'array di oggetti Esercizio
+            for (Esercizio esercizio : esercizi) {
+                Exercise check = exerciseService.findByName(esercizio.getName());
+                if (check == null){
+                    Exercise newExercise = new Exercise(esercizio.getName(), esercizio.getInstructions());
+                    Exercise exerciseSetMuscle = setMuscle(newExercise, esercizio.getMuscle());
+                    Exercise exerciseSetType = setType(exerciseSetMuscle, esercizio.getType());
+                    Exercise exerciseSetExp = setExp(exerciseSetType, exp);
+                    exerciseService.save(exerciseSetExp);
+                }
+            }
+        }
+    }
+
+    public Exercise setExp(Exercise newExercise, String exp){
+        switch (exp.toLowerCase()){
+            case "beginner":
+                newExercise.setExp(Exp.BEGINNER);
+                break;
+            case "intermediate":
+                newExercise.setExp(Exp.INTERMEDIATE);
+                break;
+            case "expert":
+                newExercise.setExp(Exp.EXPERT);
+                break;
+        }
+        return newExercise;
     }
 
     public Exercise setType(Exercise newExercise, String type){

@@ -25,7 +25,8 @@ public class Exercise {
     private Muscle muscle;
     @Column(columnDefinition = "TEXT")
     private String instructions;
-
+    @Enumerated(EnumType.STRING)
+    private Exp exp;
     public Exercise(String name, String instructions) {
         this.name = name;
         this.instructions = instructions;
