@@ -23,10 +23,17 @@ public class CardWorkout {
     @OneToMany(mappedBy = "cardWorkout", cascade = CascadeType.ALL)
     private List<Workout> workouts;
     private int restTimer;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private User coach;
 
-    public CardWorkout(String name, List<Workout> workouts, int restTimer) {
+    public CardWorkout(String name, List<Workout> workouts, int restTimer, User user) {
         this.name = name;
         this.workouts = workouts;
         this.restTimer = restTimer;
+        this.user = user;
     }
 }
