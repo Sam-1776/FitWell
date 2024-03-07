@@ -54,6 +54,10 @@ public class WorkoutService {
         List<Set> setList = workout.setId().stream().map(el -> setService.findById(UUID.fromString(el))).toList();
         found.setExercise(exercise);
         found.setSets(setList);
+        setList.forEach(el -> {
+            el.setWorkout(found);
+            setDAO.save(el);
+        });
         return workoutDAO.save(found);
     }
 
