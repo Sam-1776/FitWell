@@ -12,7 +12,6 @@ public record CardWorkoutDTO(
         @NotEmpty(message = "workouts required")
         List<String> workouts_id,
         int restTimer,
-        @NotEmpty(message = "user required")
         String user_id,
         String coach_id
 ) {

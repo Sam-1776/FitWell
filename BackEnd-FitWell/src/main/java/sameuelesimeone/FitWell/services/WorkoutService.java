@@ -48,6 +48,24 @@ public class WorkoutService {
         return workoutDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
+    public Workout modWorkout(UUID id, WorkoutDTO workout){
+        Workout found = this.findByID(id);
+        Exercise exercise = exerciseService.findById(UUID.fromString(workout.exerciseId()));
+        List<Set> setList = workout.setId().stream().map(el -> setService.findById(UUID.fromString(el))).toList();
+        found.setExercise(exercise);
+        found.setSets(setList);
+        setList.forEach(el -> {
+            el.setWorkout(found);
+            setDAO.save(el);
+        });
+        return workoutDAO.save(found);
+    }
+
+    public void deleteWorkout(UUID id){
+        Workout found = this.findByID(id);
+        workoutDAO.delete(found);
+    }
+
     public List<Workout> generateWorkout(GenerateCardDTO generateCardDTO){
         List<Workout> workoutList = new ArrayList<>();
         switch (generateCardDTO.partMuscle()){
