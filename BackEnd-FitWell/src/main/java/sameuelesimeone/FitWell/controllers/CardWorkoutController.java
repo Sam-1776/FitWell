@@ -28,7 +28,7 @@ public class CardWorkoutController {
         return cardWorkoutService.getAllCard(current);
     }
 
-    @GetMapping
+    @GetMapping("/coach")
     @PreAuthorize("hasAnyAuthority('COACH')")
     public List<CardWorkout> getAllCardCoach(@AuthenticationPrincipal User current){
         return cardWorkoutService.getAllCardCoach(current);
@@ -42,7 +42,7 @@ public class CardWorkoutController {
         return cardWorkoutService.save(cardWorkoutDTO, currentUser);
     }
 
-    @PostMapping
+    @PostMapping("/coach")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('COACH')")
     public CardWorkout saveCardCoach(@RequestBody CardWorkoutDTO cardWorkoutDTO, @AuthenticationPrincipal User currentUser){
