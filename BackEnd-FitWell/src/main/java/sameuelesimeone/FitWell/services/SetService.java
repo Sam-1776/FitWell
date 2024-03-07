@@ -28,6 +28,18 @@ public class SetService {
         return newSet;
     }
 
+    public Set modSet(UUID SetId, SetDTO set){
+        Set found = this.findById(SetId);
+        found.setRep(set.rep());
+        found.setWeight(set.weight());
+        return setDAO.save(found);
+    }
+
+    public void deleteSet(UUID setId){
+        Set found = this.findById(setId);
+        setDAO.delete(found);
+    }
+
     public Set generateLowSet(){
         return setDAO.save(new Set(8, random.nextDouble(2.5, 8.0)));
     }

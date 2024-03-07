@@ -3,6 +3,7 @@ package sameuelesimeone.FitWell.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sameuelesimeone.FitWell.models.Exercise;
 import sameuelesimeone.FitWell.services.ExerciseService;
@@ -17,6 +18,7 @@ public class ExercisesController {
     ExerciseService exerciseService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('USER', 'COACH', 'ADMIN')")
     public Page<Exercise> getAllExercises(@RequestParam(defaultValue = "0") int page,
                                           @RequestParam(defaultValue = "10") int size,
                                           @RequestParam(defaultValue = "id") String orderBy){
@@ -24,6 +26,7 @@ public class ExercisesController {
     }
 
     @GetMapping("/{exerciseId}")
+    @PreAuthorize("hasAnyAuthority('USER', 'COACH', 'ADMIN')")
     public Exercise getExercise(@PathVariable UUID exerciseId){
         return exerciseService.findById(exerciseId);
     }
