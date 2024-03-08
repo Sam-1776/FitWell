@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sameuelesimeone.FitWell.dto.CardWorkoutDTO;
 import sameuelesimeone.FitWell.dto.GenerateCardDTO;
+import sameuelesimeone.FitWell.dto.MailRequestCoachDTO;
 import sameuelesimeone.FitWell.models.CardWorkout;
 import sameuelesimeone.FitWell.models.User;
 import sameuelesimeone.FitWell.services.CardWorkoutService;
@@ -67,4 +68,12 @@ public class CardWorkoutController {
     public void deleteCard(@PathVariable UUID cardId, @AuthenticationPrincipal User currentUser){
         cardWorkoutService.deleteCard(cardId, currentUser);
     }
+
+
+    @PostMapping("/requestMail")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public void RequestOnCardWorkout(@AuthenticationPrincipal User user, @RequestBody MailRequestCoachDTO mail){
+        cardWorkoutService.requestOnCard(user, mail);
+    }
+
 }

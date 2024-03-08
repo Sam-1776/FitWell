@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import sameuelesimeone.FitWell.config.MailgunSender;
 import sameuelesimeone.FitWell.dao.UserDAO;
 import sameuelesimeone.FitWell.dto.RoleDTO;
 import sameuelesimeone.FitWell.exceptions.NotFoundException;
@@ -24,6 +25,9 @@ public class UserService {
 
     @Autowired
     UserDAO userDAO;
+
+    @Autowired
+    MailgunSender mailgunSender;
 
 
     public Page<User> getUsers(int pageN, int pageS, String OrderBy) {
@@ -48,6 +52,7 @@ public class UserService {
     public void deleteUser(UUID id) {
         User found = this.findById(id);
         userDAO.delete(found);
+        mailgunSender.sendDeleteAccount(found);
     }
 
     public User findByEmail(String email){

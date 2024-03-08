@@ -7,11 +7,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import sameuelesimeone.FitWell.config.MailgunSender;
 import sameuelesimeone.FitWell.dao.CardWorkoutDAO;
 import sameuelesimeone.FitWell.dao.UserDAO;
 import sameuelesimeone.FitWell.dao.WorkoutDAO;
 import sameuelesimeone.FitWell.dto.CardWorkoutDTO;
 import sameuelesimeone.FitWell.dto.GenerateCardDTO;
+import sameuelesimeone.FitWell.dto.MailRequestCoachDTO;
 import sameuelesimeone.FitWell.exceptions.BadRequestException;
 import sameuelesimeone.FitWell.exceptions.NotFoundException;
 import sameuelesimeone.FitWell.exceptions.UnauthorizedExeption;
@@ -42,6 +44,9 @@ public class CardWorkoutService {
 
     @Autowired
     UserDAO userDAO;
+
+    @Autowired
+    MailgunSender mailgunSender;
 
     public List<CardWorkout> getAllCard(User current){
         if (current.getRole().size() == 1){
@@ -162,6 +167,21 @@ public class CardWorkoutService {
         acctualUser.setWorkouts(cardWorkoutList);
         userDAO.save(acctualUser);
         return newCard;
+    }
+
+    public void requestOnCard(User user, MailRequestCoachDTO mail){
+        User coach = userService.findById(UUID.fromString(mail.coachId()));
+        CardWorkout card = this.findById(UUID.fromString(mail.cardId()));
+        switch (mail.function().toLowerCase()){
+            case "create":
+                mailgunSender.sendRequestCreateCard(user, coach);
+                break;
+            case "modify", "delete":
+                mailgunSender.sendrequestOnCard(user, coach, card, mail.function());
+                break;
+            default:
+                throw new BadRequestException("Invalid request");
+        }
     }
 
 
