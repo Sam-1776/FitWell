@@ -3,6 +3,7 @@ package sameuelesimeone.FitWell;
 import com.google.gson.Gson;
 import org.hibernate.annotations.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import sameuelesimeone.FitWell.models.*;
@@ -31,6 +32,9 @@ public class DBExercisesRunner implements CommandLineRunner {
 
     @Autowired
     ExerciseService exerciseService;
+
+    @Value("${x.api.key}")
+    private String myAccessToken;
     @Override
     public void run(String... args) throws Exception {
 
@@ -91,7 +95,7 @@ public class DBExercisesRunner implements CommandLineRunner {
                 .build();
 
         Builder builder = HttpRequest.newBuilder(new URI("https://api.api-ninjas.com/v1/exercises?muscle=" + muscle));
-        HttpRequest httpRequest = builder.GET().header("X-Api-Key", "5KLG+fGD3EMDyNgTaOM2VQ==S8OaC358eBuDcifj").build();
+        HttpRequest httpRequest = builder.GET().header("X-Api-Key", myAccessToken).build();
 
         BodyHandler<String> bodyHandler = HttpResponse.BodyHandlers.ofString();
         HttpResponse<String> httpResponse = client.send(httpRequest, bodyHandler);
@@ -123,7 +127,7 @@ public class DBExercisesRunner implements CommandLineRunner {
 
         for (int i = 0; i < 3; i++) {
             Builder builder = HttpRequest.newBuilder(new URI("https://api.api-ninjas.com/v1/exercises?type=" + type + "&offset=" + i));
-            HttpRequest httpRequest = builder.GET().header("X-Api-Key", "5KLG+fGD3EMDyNgTaOM2VQ==S8OaC358eBuDcifj").build();
+            HttpRequest httpRequest = builder.GET().header("X-Api-Key", myAccessToken).build();
 
             BodyHandler<String> bodyHandler = HttpResponse.BodyHandlers.ofString();
             HttpResponse<String> httpResponse = client.send(httpRequest, bodyHandler);
@@ -155,7 +159,7 @@ public class DBExercisesRunner implements CommandLineRunner {
 
         for (int i = 0; i < 3; i++) {
             Builder builder = HttpRequest.newBuilder(new URI("https://api.api-ninjas.com/v1/exercises?difficulty=" + exp + "&offset=" + i));
-            HttpRequest httpRequest = builder.GET().header("X-Api-Key", "5KLG+fGD3EMDyNgTaOM2VQ==S8OaC358eBuDcifj").build();
+            HttpRequest httpRequest = builder.GET().header("X-Api-Key", myAccessToken).build();
 
             BodyHandler<String> bodyHandler = HttpResponse.BodyHandlers.ofString();
             HttpResponse<String> httpResponse = client.send(httpRequest, bodyHandler);
