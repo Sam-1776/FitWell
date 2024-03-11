@@ -37,6 +37,11 @@ public class AutoDietService {
     public DietAuto generateDiet(AutoDietDTO autoDiet, User user){
         List<DietAuto> diets = new ArrayList<>();
         int KcalD = generatekCalDaily(autoDiet);
+        if (autoDiet.target().equals("bulk")){
+            KcalD += 300;
+        }else if (autoDiet.target().equals("cut")){
+            KcalD -= 300;
+        }
         int RMR = RMR(autoDiet);
         List<AutomaticRecipe> recipes = takeRecipeByNumberMeal(autoDiet.numberMeals(), KcalD);
         int KcalDiet = recipes.stream().mapToInt(el -> el.getCalories()).sum();
