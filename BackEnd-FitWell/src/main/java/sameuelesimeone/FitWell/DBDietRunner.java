@@ -13,9 +13,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import sameuelesimeone.FitWell.dao.AutomaticRecipeDAO;
 import sameuelesimeone.FitWell.dao.NutrientsDAO;
+import sameuelesimeone.FitWell.dto.AutoDietDTO;
 import sameuelesimeone.FitWell.models.Diet.AutomaticRecipe;
 import sameuelesimeone.FitWell.models.Diet.Nutrients;
 import sameuelesimeone.FitWell.models.Diet.RecipeType;
+import sameuelesimeone.FitWell.services.AutoDietService;
 import sameuelesimeone.FitWell.services.AutomaticRecipeService;
 
 import java.io.IOException;
@@ -38,6 +40,9 @@ public class DBDietRunner implements CommandLineRunner {
     @Value("${access.token.fatsecret}")
     private String myAccessToken;
 
+    @Autowired
+    AutoDietService autoDietService;
+
     @Override
     public void run(String... args) throws Exception {
         String[] recipeType = {
@@ -50,6 +55,8 @@ public class DBDietRunner implements CommandLineRunner {
                 takeAllRecipe(recipe);
             }
         }
+        AutoDietDTO autoDietDTO = new AutoDietDTO(5,74,"man", 25, "student", null, "bulk");
+        System.out.println(autoDietService.RMR(autoDietDTO));
     }
 
     public void takeAllRecipe(String type) throws IOException {

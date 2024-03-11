@@ -11,6 +11,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import sameuelesimeone.FitWell.models.Diet.DietAuto;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +49,8 @@ public class User implements UserDetails {
     private List<Role> role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CardWorkout> workouts;
-//    private List<Diet> diets;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<DietAuto> dietAutos;
 //    private NoteBookD noteBookD;
 //    private NoteBookW noteBookW;
 
