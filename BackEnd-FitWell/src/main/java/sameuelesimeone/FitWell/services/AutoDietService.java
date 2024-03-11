@@ -44,9 +44,8 @@ public class AutoDietService {
         }
         int RMR = RMR(autoDiet);
         List<AutomaticRecipe> recipes = takeRecipeByNumberMeal(autoDiet.numberMeals(), KcalD);
-        int KcalDiet = recipes.stream().mapToInt(el -> el.getCalories()).sum();
         List<Nutrients> nutrientsList = nutrients(recipes);
-        DietAuto diet = autoDietDAO.save(new DietAuto(recipes,autoDiet.numberMeals(),KcalDiet, RMR, user, nutrientsList));
+        DietAuto diet = autoDietDAO.save(new DietAuto(recipes,autoDiet.numberMeals(),KcalD, RMR, user, nutrientsList));
         diets.add(diet);
         user.setDietAutos(diets);
         userDAO.save(user);
