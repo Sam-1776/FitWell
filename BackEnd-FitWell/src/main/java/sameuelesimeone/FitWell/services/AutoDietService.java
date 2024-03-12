@@ -2,15 +2,12 @@ package sameuelesimeone.FitWell.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sameuelesimeone.FitWell.dao.AutoDietDAO;
+import sameuelesimeone.FitWell.dao.DietDAO;
 import sameuelesimeone.FitWell.dao.NutrientsDAO;
 import sameuelesimeone.FitWell.dao.UserDAO;
 import sameuelesimeone.FitWell.dto.AutoDietDTO;
 import sameuelesimeone.FitWell.exceptions.BadRequestException;
-import sameuelesimeone.FitWell.models.Diet.AutomaticRecipe;
-import sameuelesimeone.FitWell.models.Diet.DietAuto;
-import sameuelesimeone.FitWell.models.Diet.Nutrients;
-import sameuelesimeone.FitWell.models.Diet.RecipeType;
+import sameuelesimeone.FitWell.models.Diet.*;
 import sameuelesimeone.FitWell.models.User;
 
 import java.util.ArrayList;
@@ -21,7 +18,7 @@ import java.util.Random;
 public class AutoDietService {
 
     @Autowired
-    AutoDietDAO autoDietDAO;
+    DietDAO autoDietDAO;
 
     @Autowired
     AutomaticRecipeService automaticRecipeService;
@@ -34,8 +31,8 @@ public class AutoDietService {
 
     private Random rdm = new Random();
 
-    public DietAuto generateDiet(AutoDietDTO autoDiet, User user){
-        List<DietAuto> diets = new ArrayList<>();
+    public Diet generateDiet(AutoDietDTO autoDiet, User user){
+        List<Diet> diets = new ArrayList<>();
         int KcalD = generatekCalDaily(autoDiet);
         if (autoDiet.target().equals("bulk")){
             KcalD += 300;
@@ -43,18 +40,18 @@ public class AutoDietService {
             KcalD -= 300;
         }
         int RMR = RMR(autoDiet);
-        List<AutomaticRecipe> recipes = takeRecipeByNumberMeal(autoDiet.numberMeals(), KcalD);
+        List<Recipe> recipes = takeRecipeByNumberMeal(autoDiet.numberMeals(), KcalD);
         List<Nutrients> nutrientsList = nutrients(recipes);
-        DietAuto diet = autoDietDAO.save(new DietAuto(recipes,autoDiet.numberMeals(),KcalD, RMR, user, nutrientsList));
+        Diet diet = autoDietDAO.save(new Diet(recipes,autoDiet.numberMeals(),KcalD, RMR, user, nutrientsList));
         diets.add(diet);
-        user.setDietAutos(diets);
+        user.setDiets(diets);
         userDAO.save(user);
         return diet;
     }
 
 
-    public List<AutomaticRecipe> takeRecipeByNumberMeal(int numberMeal, int Kcal){
-        List<AutomaticRecipe> automaticRecipeList = new ArrayList<>();
+    public List<Recipe> takeRecipeByNumberMeal(int numberMeal, int Kcal){
+        List<Recipe> automaticRecipeList = new ArrayList<>();
         switch (numberMeal){
             case 3:
                 return generateDietByKcal3(Kcal,automaticRecipeList );
@@ -65,8 +62,9 @@ public class AutoDietService {
         }
     }
 
-    public List<AutomaticRecipe> generateDietByKcal3(int Kcal, List<AutomaticRecipe> recipeList){
+    public List<Recipe> generateDietByKcal3(int Kcal, List<Recipe> recipes){
         int cal = 0;
+        List<AutomaticRecipe> recipeList = new ArrayList<>();
         do {
             List<AutomaticRecipe> breakfastList = automaticRecipeService.findByType(RecipeType.BREAKFAST);
             AutomaticRecipe breakFast = breakfastList.get(rdm.nextInt(1, breakfastList.size()));
@@ -77,12 +75,16 @@ public class AutoDietService {
             AutomaticRecipe dinner = lunchList.get(rdm.nextInt(1, lunchList.size()));
             recipeList.add(dinner);
             cal = breakFast.getCalories() + lunch.getCalories() + dinner.getCalories();
+            for (AutomaticRecipe recipe : recipeList) {
+                recipes.add(RecipeAdapter.convertFromAutomaticRecipe(recipe));
+            }
         }while (cal == Kcal);
-        return recipeList;
+        return recipes;
     }
 
-    public List<AutomaticRecipe> generateDietByKcal5(int Kcal, List<AutomaticRecipe> recipeList){
+    public List<Recipe> generateDietByKcal5(int Kcal,  List<Recipe> recipes){
         int cal = 0;
+        List<AutomaticRecipe> recipeList = new ArrayList<>();
         do {
             List<AutomaticRecipe> breakfastList = automaticRecipeService.findByType(RecipeType.BREAKFAST);
             AutomaticRecipe breakFast = breakfastList.get(rdm.nextInt(1, breakfastList.size()));
@@ -98,19 +100,22 @@ public class AutoDietService {
             recipeList.add(snack1);
             recipeList.add(snack2);
             cal = breakFast.getCalories() + lunch.getCalories() + dinner.getCalories() + snack1.getCalories() + snack2.getCalories();
+            for (AutomaticRecipe recipe : recipeList) {
+                recipes.add(RecipeAdapter.convertFromAutomaticRecipe(recipe));
+            }
         }while (cal == Kcal);
-        return recipeList;
+        return recipes;
     }
 
 
-    public List<Nutrients> nutrients(List<AutomaticRecipe> recipes){
+    public List<Nutrients> nutrients(List<Recipe> recipes){
         Nutrients carbo = new Nutrients();
         Nutrients protein = new Nutrients();
         Nutrients fat = new Nutrients();
         double amountC = 0.0;
         double amountP = 0.0;
         double amountF = 0.0;
-        for (AutomaticRecipe recipe : recipes) {
+        for (Recipe recipe : recipes) {
             for (Nutrients nutrients1 : recipe.getNutrition()) {
                 switch (nutrients1.getName()){
                     case "carbohydrate":

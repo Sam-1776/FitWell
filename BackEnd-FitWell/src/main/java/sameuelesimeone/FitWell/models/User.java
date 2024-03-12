@@ -1,7 +1,6 @@
 package sameuelesimeone.FitWell.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import sameuelesimeone.FitWell.models.Diet.DietAuto;
+import sameuelesimeone.FitWell.models.Diet.Diet;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +26,7 @@ import java.util.UUID;
 @JsonIgnoreProperties({
         "password"
         , "workouts"
+        , "diets"
         , "credentialsNonExpired"
         , "accountNonExpired"
         , "authorities"
@@ -50,7 +50,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CardWorkout> workouts;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<DietAuto> dietAutos;
+    private List<Diet> diets;
 //    private NoteBookD noteBookD;
 //    private NoteBookW noteBookW;
 

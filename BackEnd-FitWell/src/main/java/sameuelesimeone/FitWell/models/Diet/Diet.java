@@ -1,6 +1,5 @@
 package sameuelesimeone.FitWell.models.Diet;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,18 +12,18 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "dietsAuto")
+@Table(name = "diets")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class DietAuto {
+public class Diet {
     @Id
     @GeneratedValue
     private UUID id;
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "auto_diet_id")
-    private List<AutomaticRecipe> recipes;
+    @JoinColumn(name = "diet_id")
+    private List<Recipe> recipes;
     private int numberMeals;
     private int totalCalories;
     private int RMR;
@@ -32,11 +31,15 @@ public class DietAuto {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "nutritionist_id")
+    private User nutritionist;
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "auto_diet_id")
+    @JoinColumn(name = "diet_id")
     private List<Nutrients> nutrients;
 
-    public DietAuto(List<AutomaticRecipe> recipes, int numberMeals, int totalCalories, int RMR, User user, List<Nutrients> nutrients) {
+
+    public Diet(List<Recipe> recipes, int numberMeals, int totalCalories, int RMR, User user, List<Nutrients> nutrients) {
         this.recipes = recipes;
         this.numberMeals = numberMeals;
         this.totalCalories = totalCalories;
