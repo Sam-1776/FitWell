@@ -28,10 +28,10 @@ public class Food {
     private List<Category> categories;
     private int calories;
 
-    public Food(String name, double amount, String unit, List<Nutrients> nutrition, List<Category> categories, int calories) {
+    public Food(String name, List<Nutrients> nutrition, List<Category> categories, int calories) {
         this.name = name;
-        this.amount = amount;
-        this.unit = unit;
+        this.amount = 100.0;
+        this.unit = "g";
         this.nutrition = nutrition;
         this.categories = categories;
         this.calories = calories;

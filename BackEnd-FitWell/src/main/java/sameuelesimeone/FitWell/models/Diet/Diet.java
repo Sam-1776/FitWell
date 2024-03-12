@@ -29,7 +29,6 @@ public class Diet {
     private int RMR;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
     @ManyToOne
     @JoinColumn(name = "nutritionist_id")
