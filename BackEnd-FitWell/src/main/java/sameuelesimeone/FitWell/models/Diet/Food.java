@@ -25,6 +25,7 @@ public class Food {
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "food_id")
     private List<Nutrients> nutrition;
+    @Enumerated(EnumType.STRING)
     private List<Category> categories;
     private int calories;
 

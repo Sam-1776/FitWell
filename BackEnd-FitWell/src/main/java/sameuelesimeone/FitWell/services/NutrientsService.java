@@ -20,6 +20,10 @@ public class NutrientsService {
         return nutrientsDAO.save(new Nutrients(nutrient.name(), nutrient.amount()));
     }
 
+    public Nutrients createByFood(Nutrients nutrient, double amount){
+        return nutrientsDAO.save(new Nutrients(nutrient.getName(), nutrient.getAmount()*amount));
+    }
+
     public Nutrients findById(UUID id){
         return nutrientsDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
@@ -29,5 +33,10 @@ public class NutrientsService {
         found.setAmount(nutrient.amount());
         nutrientsDAO.save(found);
         return found;
+    }
+
+    public Nutrients modNutrientsByFood(Nutrients nutrient, double amount){
+        nutrient.setAmount(nutrient.getAmount()*amount);
+        return nutrientsDAO.save(nutrient);
     }
 }

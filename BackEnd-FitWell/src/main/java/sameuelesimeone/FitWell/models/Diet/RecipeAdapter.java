@@ -14,7 +14,7 @@ public class RecipeAdapter {
         // Convert ingredients
         List<FoodsIntermediate> foodsIntermediateList = automaticRecipe.getIngredients()
                 .stream()
-                .map(ingredientName -> new FoodsIntermediate(ingredientName, 0, "", new ArrayList<>(), new ArrayList<>(), 0))
+                .map(ingredientName -> new FoodsIntermediate(ingredientName, 0, new ArrayList<>(), new ArrayList<>(), 0))
                 .collect(Collectors.toList());
         recipe.setIngredients(foodsIntermediateList);
 

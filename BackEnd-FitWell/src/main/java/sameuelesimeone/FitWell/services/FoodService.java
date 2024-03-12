@@ -28,9 +28,6 @@ public class FoodService {
     FoodDAO foodDAO;
 
     @Autowired
-    FoodInterDAO foodInterDAO;
-
-    @Autowired
     NutrientsService nutrientsService;
 
     @Autowired
