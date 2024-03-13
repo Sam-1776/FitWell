@@ -55,7 +55,7 @@ public class DBDietRunner implements CommandLineRunner {
                 takeAllRecipe(recipe);
             }
         }
-        AutoDietDTO autoDietDTO = new AutoDietDTO(5,74,"man", 25, "student", null, "bulk");
+        AutoDietDTO autoDietDTO = new AutoDietDTO(5,74,"man", 25, "student", null, "bulk", null, null);
         System.out.println(autoDietService.RMR(autoDietDTO));
     }
 

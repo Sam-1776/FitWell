@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sameuelesimeone.FitWell.dao.NutrientsDAO;
 import sameuelesimeone.FitWell.dto.NutrientsDTO;
+import sameuelesimeone.FitWell.exceptions.BadRequestException;
 import sameuelesimeone.FitWell.exceptions.NotFoundException;
 import sameuelesimeone.FitWell.models.Diet.FoodsIntermediate;
 import sameuelesimeone.FitWell.models.Diet.Nutrients;
@@ -67,6 +68,53 @@ public class NutrientsService {
         nutrientsList.add(proteinSave);
         nutrientsList.add(fatSave);
         return nutrientsList;
+    }
+
+
+    public List<Nutrients> nutrientsByDiet(List<Recipe> recipes, int car, int fatty, int pro){
+        Nutrients carbo = new Nutrients();
+        Nutrients protein = new Nutrients();
+        Nutrients fat = new Nutrients();
+        double amountC = 0.0;
+        double amountP = 0.0;
+        double amountF = 0.0;
+        for (Recipe recipe : recipes) {
+            for (Nutrients nutrients1 : recipe.getNutrition()) {
+                switch (nutrients1.getName()){
+                    case "carbohydrate":
+                        carbo.setName(nutrients1.getName());
+                        amountC += nutrients1.getAmount();
+                        carbo.setAmount(amountC);
+                        carbo.setUnit(nutrients1.getUnit());
+                        break;
+                    case"protein":
+                        protein.setName(nutrients1.getName());
+                        amountP += nutrients1.getAmount();
+                        protein.setAmount(amountP);
+                        protein.setUnit(nutrients1.getUnit());
+                        break;
+                    default:
+                        fat.setName(nutrients1.getName());
+                        amountF += nutrients1.getAmount();
+                        fat.setAmount(amountF);
+                        fat.setUnit(nutrients1.getUnit());
+                        break;
+                }
+            }
+        }
+        if (amountC == car && amountF == fatty && amountP == pro){
+            Nutrients carboSave = nutrientsDAO.save(carbo);
+            Nutrients proteinSave = nutrientsDAO.save(protein);
+            Nutrients fatSave = nutrientsDAO.save(fat);
+            List<Nutrients> nutrientsList = new ArrayList<>();
+            nutrientsList.add(carboSave);
+            nutrientsList.add(proteinSave);
+            nutrientsList.add(fatSave);
+            return nutrientsList;
+        }else {
+            throw new BadRequestException("Macros do not match, please try again");
+        }
+
     }
 
     public Nutrients findById(UUID id){

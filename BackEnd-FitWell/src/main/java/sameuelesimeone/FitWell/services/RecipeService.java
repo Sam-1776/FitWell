@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sameuelesimeone.FitWell.dao.RecipeDAO;
 import sameuelesimeone.FitWell.dto.RecipeDTO;
+import sameuelesimeone.FitWell.exceptions.NotFoundException;
 import sameuelesimeone.FitWell.models.Diet.FoodsIntermediate;
 import sameuelesimeone.FitWell.models.Diet.Nutrients;
 import sameuelesimeone.FitWell.models.Diet.Recipe;
@@ -29,5 +30,14 @@ public class RecipeService {
         int calories = ingrediets.stream().mapToInt(FoodsIntermediate::getCalories).sum();
         List<Nutrients> nutrients = nutrientsService.nutrientsByRecipe(ingrediets);
         return recipeDAO.save(new Recipe(recipeDTO.name(), ingrediets, calories, nutrients));
+    }
+
+    public Recipe findById(UUID id){
+        return recipeDAO.findById(id).orElseThrow(()-> new NotFoundException(id));
+    }
+
+    public void deleteRecipe(UUID id){
+        Recipe found = this.findById(id);
+        recipeDAO.delete(found);
     }
 }

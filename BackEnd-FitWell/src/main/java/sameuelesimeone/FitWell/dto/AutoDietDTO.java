@@ -1,5 +1,7 @@
 package sameuelesimeone.FitWell.dto;
 
+import java.util.List;
+
 public record AutoDietDTO(
         int numberMeals,
         double weight,
@@ -7,6 +9,8 @@ public record AutoDietDTO(
         int age,
         String work,
         String workout,
-        String target
+        String target,
+        String user_id,
+        List<String> recipe_id
 ) {
 }
