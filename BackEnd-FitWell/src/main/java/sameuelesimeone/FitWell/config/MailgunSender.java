@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sameuelesimeone.FitWell.dto.MailRequestCoachDTO;
 import sameuelesimeone.FitWell.models.CardWorkout;
+import sameuelesimeone.FitWell.models.Diet.Diet;
 import sameuelesimeone.FitWell.models.User;
 
 @Service
@@ -57,6 +58,26 @@ public class MailgunSender {
                 .queryString("to", coach.getEmail())
                 .queryString("subject", function +"cardWorkout")
                 .queryString("text", "request to " + function + " a cardWorkout ID: " + card.getId() + " for " + user.getName() + user.getSurname())
+                .asJson();
+    }
+
+    public void sendRequestCreateDiet(User user, User nutritionist){
+        Unirest.post("https://api.mailgun.net/v3/" + domainName + "/messages")
+                .basicAuth("api", mailGunAPIKey)
+                .queryString("from", "FitWell <FitWellSRL@gmail.com>")
+                .queryString("to", nutritionist.getEmail())
+                .queryString("subject", "Create cardWorkout")
+                .queryString("text", "request to create a Diet for " + user.getName() + user.getSurname())
+                .asJson();
+    }
+
+    public void sendrequestOnDiet(User user, User nutritionist, Diet diet, String function){
+        Unirest.post("https://api.mailgun.net/v3/" + domainName + "/messages")
+                .basicAuth("api", mailGunAPIKey)
+                .queryString("from", "FitWell <FitWellSRL@gmail.com>")
+                .queryString("to", nutritionist.getEmail())
+                .queryString("subject", function +"cardWorkout")
+                .queryString("text", "request to " + function + " a Diet ID: " + diet.getId() + " for " + user.getName() + user.getSurname())
                 .asJson();
     }
 
