@@ -8,6 +8,8 @@ import sameuelesimeone.FitWell.dto.RecipeDTO;
 import sameuelesimeone.FitWell.models.Diet.Recipe;
 import sameuelesimeone.FitWell.services.RecipeService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -21,4 +23,24 @@ public class RecipeController {
     public Recipe createRecipe(@RequestBody RecipeDTO recipeDTO){
         return recipeService.createRecipe(recipeDTO);
     }
+
+    @PatchMapping("/{recipeId}")
+    @PreAuthorize("hasAnyAuthority('NUTRITIONIST','ADMIN')")
+    public Recipe modRecipe(@PathVariable UUID recipeId, @RequestBody RecipeDTO recipeDTO){
+        return recipeService.modRecipe(recipeId, recipeDTO);
+    }
+
+    @GetMapping("/{recipeId}")
+    @PreAuthorize("hasAnyAuthority('USER','NUTRITIONIST','ADMIN')")
+    public Recipe getRecipe(@PathVariable UUID recipeId){
+        return recipeService.findById(recipeId);
+    }
+
+    @DeleteMapping("/{recipeId}")
+    @PreAuthorize("hasAnyAuthority('NUTRITIONIST','ADMIN')")
+    public void modRecipe(@PathVariable UUID recipeId){
+        recipeService.deleteRecipe(recipeId);
+    }
+
+
 }

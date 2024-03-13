@@ -117,6 +117,90 @@ public class NutrientsService {
 
     }
 
+
+    public List<Nutrients> modNutrientsByDiet(List<Recipe> recipes, int car, int fatty, int pro, List<Nutrients> nutrients){
+        double amountC = 0.0;
+        double amountP = 0.0;
+        double amountF = 0.0;
+        for (Recipe recipe : recipes) {
+            for (Nutrients nutrients1 : recipe.getNutrition()) {
+                switch (nutrients1.getName()){
+                    case "carbohydrate":
+                        amountC += nutrients1.getAmount();
+                        break;
+                    case"protein":
+                        amountP += nutrients1.getAmount();
+                        break;
+                    default:
+                        amountF += nutrients1.getAmount();
+                        break;
+                }
+            }
+        }
+        if (amountC == car && amountF == fatty && amountP == pro){
+            for (Nutrients nutrient : nutrients) {
+                switch (nutrient.getName()){
+                    case "carbohydrate":
+                        nutrient.setAmount(amountC);
+                        nutrientsDAO.save(nutrient);
+                        break;
+                    case"protein":
+                        nutrient.setAmount(amountP);
+                        nutrientsDAO.save(nutrient);
+                        break;
+                    default:
+                        nutrient.setAmount(amountF);
+                        nutrientsDAO.save(nutrient);
+                        break;
+                }
+            }
+            return nutrients;
+        }else {
+            throw new BadRequestException("Macros do not match, please try again");
+        }
+
+    }
+
+
+    public List<Nutrients> modNutrientsByRecipe(List<FoodsIntermediate> foods, List<Nutrients> nutrients){
+        double amountC = 0.0;
+        double amountP = 0.0;
+        double amountF = 0.0;
+        for (FoodsIntermediate food : foods) {
+            for (Nutrients nutrients1 : food.getNutrition()) {
+                switch (nutrients1.getName()){
+                    case "carbohydrate":
+                        amountC += nutrients1.getAmount();
+                        break;
+                    case"protein":
+                        amountP += nutrients1.getAmount();
+                        break;
+                    default:
+                        amountF += nutrients1.getAmount();
+                        break;
+                }
+            }
+        }
+        for (Nutrients nutrient : nutrients) {
+            switch (nutrient.getName()){
+                case "carbohydrate":
+                    nutrient.setAmount(amountC);
+                    nutrientsDAO.save(nutrient);
+                    break;
+                    case"protein":
+                        nutrient.setAmount(amountP);
+                        nutrientsDAO.save(nutrient);
+                        break;
+                    default:
+                        nutrient.setAmount(amountF);
+                        nutrientsDAO.save(nutrient);
+                        break;
+            }
+        }
+            return nutrients;
+
+    }
+
     public Nutrients findById(UUID id){
         return nutrientsDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }

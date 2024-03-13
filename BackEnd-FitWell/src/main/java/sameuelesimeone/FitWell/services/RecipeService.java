@@ -40,4 +40,17 @@ public class RecipeService {
         Recipe found = this.findById(id);
         recipeDAO.delete(found);
     }
+
+    public Recipe modRecipe(UUID id, RecipeDTO recipeDTO){
+        Recipe found = this.findById(id);
+        List<FoodsIntermediate> ingrediets = recipeDTO.food_id().stream()
+                .map(el -> foodInterService.findById(UUID.fromString(el))).toList();
+        int calories = ingrediets.stream().mapToInt(FoodsIntermediate::getCalories).sum();
+        List<Nutrients> nutrients = nutrientsService.modNutrientsByRecipe(ingrediets, found.getNutrition());
+        found.setName(recipeDTO.name());
+        found.setIngredients(ingrediets);
+        found.setCalories(calories);
+        found.setNutrition(nutrients);
+        return recipeDAO.save(found);
+    }
 }

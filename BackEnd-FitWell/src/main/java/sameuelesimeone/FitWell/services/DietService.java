@@ -2,11 +2,16 @@ package sameuelesimeone.FitWell.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sameuelesimeone.FitWell.config.MailgunSender;
 import sameuelesimeone.FitWell.dao.DietDAO;
 import sameuelesimeone.FitWell.dao.UserDAO;
 import sameuelesimeone.FitWell.dto.AutoDietDTO;
+import sameuelesimeone.FitWell.dto.MailRequestCoachDTO;
+import sameuelesimeone.FitWell.dto.MailRequestNutritionistDTO;
+import sameuelesimeone.FitWell.exceptions.BadRequestException;
 import sameuelesimeone.FitWell.exceptions.NotFoundException;
 import sameuelesimeone.FitWell.exceptions.UnauthorizedExeption;
+import sameuelesimeone.FitWell.models.CardWorkout;
 import sameuelesimeone.FitWell.models.Diet.Diet;
 import sameuelesimeone.FitWell.models.Diet.Nutrients;
 import sameuelesimeone.FitWell.models.Diet.Recipe;
@@ -38,33 +43,77 @@ public class DietService {
     @Autowired
     NutrientsService nutrientsService;
 
+    @Autowired
+    MailgunSender mailgunSender;
+
+
+    public List<Diet> getAllDiet(User current){
+        if (current.getRole().size() == 1 || current.getRole().get(1).equals(Role.COACH)){
+            return dietDAO.findByUser(current);
+        }else if (current.getRole().get(1).equals(Role.NUTRITIONIST)){
+            return  dietDAO.findByNutritionist(current);
+        }
+        throw new UnauthorizedExeption("Invalid Role");
+    }
+
+    public List<Diet> getAllNutritionistDiet(User current){
+        return dietDAO.findByUser(current);
+    }
+
     public Diet generateNewDiet(AutoDietDTO DietDTO, User nutritionist){
         User user = userService.findById(UUID.fromString(DietDTO.user_id()));
+        Diet newDiet = new Diet();
+        Diet created = create(newDiet, DietDTO);
+        created.setUser(user);
+        created.setNutritionist(nutritionist);
+        Diet saved = dietDAO.save(created);
+        List<Diet> dietList = new ArrayList<>();
+        dietList.add(saved);
+
+        user.setDiets(dietList);
+        userDAO.save(user);
+        return saved;
+    }
+
+    public Diet generateDietNutritionist(AutoDietDTO dietDTO, User current){
+        Diet newDiet = new Diet();
+        Diet created = create(newDiet, dietDTO);
+        created.setUser(current);
+        Diet saved = dietDAO.save(created);
+        List<Diet> dietList = new ArrayList<>();
+        dietList.add(saved);
+
+        current.setDiets(dietList);
+        userDAO.save(current);
+        return saved;
+    }
+
+
+    public Diet create(Diet diet, AutoDietDTO dietDTO){
         List<Integer> macro = new ArrayList<>();
-        int KcalD = autoDietService.generatekCalDaily(DietDTO);
-        int RMR = autoDietService.RMR(DietDTO);
-        if (DietDTO.target().equals("bulk")){
+        int KcalD = autoDietService.generatekCalDaily(dietDTO);
+        int RMR = autoDietService.RMR(dietDTO);
+        if (dietDTO.target().equals("bulk")){
             KcalD += 300;
-            macro.addAll(Macro(DietDTO.weight(), "bulk", KcalD));
-        }else if (DietDTO.target().equals("cut")){
+            macro.addAll(Macro(dietDTO.weight(), "bulk", KcalD));
+        }else if (dietDTO.target().equals("cut")){
             KcalD -= 300;
-            macro.addAll(Macro(DietDTO.weight(), "cut", KcalD));
+            macro.addAll(Macro(dietDTO.weight(), "cut", KcalD));
         }else {
-            macro.addAll(Macro(DietDTO.weight(), "normo", KcalD));
+            macro.addAll(Macro(dietDTO.weight(), "normo", KcalD));
         }
         int protein = macro.get(0);
         int carbo = macro.get(2);
         int fat = macro.get(1);
-        List<Recipe> recipeList = DietDTO.recipe_id().stream()
+        List<Recipe> recipeList = dietDTO.recipe_id().stream()
                 .map(el -> recipeService.findById(UUID.fromString(el))).toList();
         List<Nutrients> nutrients = nutrientsService.nutrientsByDiet(recipeList, carbo, fat, protein);
-        Diet newDiet = dietDAO.save(new Diet(recipeList, DietDTO.numberMeals(), KcalD, RMR, user, nutrients));
-        List<Diet> dietList = new ArrayList<>();
-        dietList.add(newDiet);
-
-        user.setDiets(dietList);
-        userDAO.save(user);
-        return newDiet;
+        diet.setRecipes(recipeList);
+        diet.setNumberMeals(dietDTO.numberMeals());
+        diet.setTotalCalories(KcalD);
+        diet.setRMR(RMR);
+        diet.setNutrients(nutrients);
+        return diet;
     }
 
 
@@ -106,6 +155,59 @@ public class DietService {
             dietDAO.delete(found);
         }else {
             throw new UnauthorizedExeption("you can't delete this diet");
+        }
+    }
+
+    public Diet modDiet(UUID dietId, User user, AutoDietDTO dietDTO){
+        Diet found = this.findById(dietId);
+        if (found.getNutritionist().getId().equals(user.getId()) || user.getRole().get(1).equals(Role.ADMIN)){
+           return  dietDAO.save(mod(dietDTO, found));
+        }else {
+            throw new UnauthorizedExeption("you can't modify this diet");
+        }
+    }
+
+
+    public Diet mod(AutoDietDTO dietDTO, Diet diet){
+        List<Integer> macro = new ArrayList<>();
+        int KcalD = autoDietService.generatekCalDaily(dietDTO);
+        int RMR = autoDietService.RMR(dietDTO);
+        if (dietDTO.target().equals("bulk")){
+            KcalD += 300;
+            macro.addAll(Macro(dietDTO.weight(), "bulk", KcalD));
+        }else if (dietDTO.target().equals("cut")){
+            KcalD -= 300;
+            macro.addAll(Macro(dietDTO.weight(), "cut", KcalD));
+        }else {
+            macro.addAll(Macro(dietDTO.weight(), "normo", KcalD));
+        }
+        int protein = macro.get(0);
+        int carbo = macro.get(2);
+        int fat = macro.get(1);
+        List<Recipe> recipeList = dietDTO.recipe_id().stream()
+                .map(el -> recipeService.findById(UUID.fromString(el))).toList();
+        List<Nutrients> nutrients = nutrientsService.modNutrientsByDiet(recipeList, carbo, fat, protein, diet.getNutrients());
+        diet.setRecipes(recipeList);
+        diet.setNumberMeals(dietDTO.numberMeals());
+        diet.setTotalCalories(KcalD);
+        diet.setRMR(RMR);
+        diet.setNutrients(nutrients);
+        return diet;
+    }
+
+
+    public void requestOnDiet(User user, MailRequestNutritionistDTO mail){
+        User nutritionist = userService.findById(UUID.fromString(mail.nutritionist_id()));
+        Diet diet = this.findById(UUID.fromString(mail.diet_id()));
+        switch (mail.function().toLowerCase()){
+            case "create":
+                mailgunSender.sendRequestCreateDiet(user, nutritionist);
+                break;
+            case "modify", "delete":
+                mailgunSender.sendrequestOnDiet(user, nutritionist, diet, mail.function());
+                break;
+            default:
+                throw new BadRequestException("Invalid request");
         }
     }
 }
