@@ -11,6 +11,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import sameuelesimeone.FitWell.models.Diet.Diet;
+import sameuelesimeone.FitWell.models.NoteBook.NoteBookD;
+import sameuelesimeone.FitWell.models.NoteBook.NoteBookW;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,11 +53,13 @@ public class User implements UserDetails {
     private List<CardWorkout> workouts;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Diet> diets;
-//    private NoteBookD noteBookD;
-//    private NoteBookW noteBookW;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private NoteBookD noteBookD;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private NoteBookW noteBookW;
 
 
-    public User(String username, String email, String password, String name, String surname, Gender gender, String avatar) {
+    public User(String username, String email, String password, String name, String surname, Gender gender, String avatar, NoteBookW noteBookW, NoteBookD noteBookD) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -66,6 +70,8 @@ public class User implements UserDetails {
         List<Role> rolesList = new ArrayList<>();
         rolesList.add(Role.USER);
         this.role = rolesList;
+        this.noteBookW = noteBookW;
+        this.noteBookD = noteBookD;
     }
 
     @Override

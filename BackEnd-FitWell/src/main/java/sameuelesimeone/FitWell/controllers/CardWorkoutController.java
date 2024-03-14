@@ -35,6 +35,12 @@ public class CardWorkoutController {
         return cardWorkoutService.getAllCardCoach(current);
     }
 
+    @GetMapping("/{cardID}")
+    @PreAuthorize("hasAnyAuthority('USER', 'COACH', 'ADMIN')")
+    public CardWorkout findById(@PathVariable UUID cardID){
+        return cardWorkoutService.findById(cardID);
+    }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

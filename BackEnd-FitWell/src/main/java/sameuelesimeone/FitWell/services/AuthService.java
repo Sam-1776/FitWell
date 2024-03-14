@@ -12,6 +12,8 @@ import sameuelesimeone.FitWell.dto.UserLoginDTO;
 import sameuelesimeone.FitWell.exceptions.BadRequestException;
 import sameuelesimeone.FitWell.exceptions.UnauthorizedExeption;
 import sameuelesimeone.FitWell.models.Gender;
+import sameuelesimeone.FitWell.models.NoteBook.NoteBookD;
+import sameuelesimeone.FitWell.models.NoteBook.NoteBookW;
 import sameuelesimeone.FitWell.models.User;
 import sameuelesimeone.FitWell.security.JWTTools;
 
@@ -33,6 +35,12 @@ public class AuthService {
     @Autowired
     private MailgunSender mailgunSender;
 
+    @Autowired
+    NoteBookWService noteBookWService;
+
+    @Autowired
+    NoteBookDService noteBookDService;
+
 
     public LoginDTO authUserAndGenerateToken(UserLoginDTO body) throws UnauthorizedExeption {
         User user = userService.findByEmail(body.email());
@@ -49,19 +57,21 @@ public class AuthService {
             throw new BadRequestException("The email is already in use");
         });
         String avatar =  "https://ui-avatars.com/api/?name=" + user.name() + "+" + user.surname();
+        NoteBookW noteBookW = noteBookWService.create();
+        NoteBookD noteBookD = noteBookDService.create();
         switch (user.gender().toLowerCase()){
             case "man":
-                User UserMan = new User(user.username(), user.email(), bcrypt.encode(user.password()), user.name(), user.surname(), Gender.MAN, avatar);
+                User UserMan = new User(user.username(), user.email(), bcrypt.encode(user.password()), user.name(), user.surname(), Gender.MAN, avatar,noteBookW, noteBookD);
                 User savedUserM = userDAO.save(UserMan);
                 mailgunSender.sendRegistrationEmail(savedUserM);
                 return savedUserM;
             case "woman":
-                User UserWoman = new User(user.username(), user.email(), bcrypt.encode(user.password()), user.name(), user.surname(), Gender.WOMAN, avatar);
+                User UserWoman = new User(user.username(), user.email(), bcrypt.encode(user.password()), user.name(), user.surname(), Gender.WOMAN, avatar,noteBookW, noteBookD);
                 User savedUserW= userDAO.save(UserWoman);
                 mailgunSender.sendRegistrationEmail(savedUserW);
                 return savedUserW;
             default:
-                User UserWithoutGender = new User(user.username(), user.email(), bcrypt.encode(user.password()), user.name(), user.surname(), Gender.OTHER, avatar);
+                User UserWithoutGender = new User(user.username(), user.email(), bcrypt.encode(user.password()), user.name(), user.surname(), Gender.OTHER, avatar,noteBookW, noteBookD);
                 User savedUserH = userDAO.save(UserWithoutGender);
                 mailgunSender.sendRegistrationEmail(savedUserH);
                 return savedUserH;

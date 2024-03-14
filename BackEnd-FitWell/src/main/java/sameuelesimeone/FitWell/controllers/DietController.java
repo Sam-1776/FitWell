@@ -38,6 +38,12 @@ public class DietController {
         return dietService.getAllNutritionistDiet(current);
     }
 
+    @GetMapping("/{dietId}")
+    @PreAuthorize("hasAnyAuthority('NUTRITIONIST', 'USER', , 'ADMIN')")
+    public Diet findById(@PathVariable UUID dietId){
+        return dietService.findById(dietId);
+    }
+
     @PostMapping("/generate")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('USER')")
