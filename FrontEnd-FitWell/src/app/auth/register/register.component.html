@@ -1,0 +1,83 @@
+<div class="container">
+  <h1 class="text-center mt-5">Register</h1>
+  <form [formGroup]="subscribeForm" (ngSubmit)="onRegister()">
+    <div class="mb-3">
+      <label for="inputUsername" class="form-label">Username: </label>
+      <input
+        type="text"
+        name="username"
+        class="form-control"
+        id="inputUsername"
+        formControlName="username"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputName" class="form-label">Nome: </label>
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        id="inputName"
+        formControlName="name"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputSurname" class="form-label">Cognome</label>
+      <input
+        type="text"
+        name="surname"
+        class="form-control"
+        id="inputSurname"
+        formControlName="surname"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputEmail" class="form-label">Email</label>
+      <input
+        type="email"
+        name="email"
+        class="form-control"
+        id="inputEmail"
+        formControlName="email"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputPassword" class="form-label">Password</label>
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        id="inputPassword"
+        formControlName="password"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputGender" class="form-label">Gender</label>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        id="inputGender"
+        name="gender"
+        formControlName="gender"
+      >
+        <option value="" disabled selected>Select gender</option>
+        <option value="man">Man</option>
+        <option value="woman">Woman</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="mt-3 mb-3 form-check">
+      <input
+        type="checkbox"
+        name="checkbox"
+        class="form-check-input"
+        id="exampleCheck1"
+        formControlName="acceptTerms"
+      />
+      <label class="form-check-label" for="exampleCheck1"
+        >Dichiaro di aver letto e accettato i termini per la privacy</label
+      >
+    </div>
+    <button type="submit" class="btn btn-success" [disabled]="!subscribeForm.valid">Confirm</button>
+  </form>
+</div>

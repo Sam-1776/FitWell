@@ -1,0 +1,59 @@
+.navbar,
+.container-fluid {
+  height: 100vh;
+  min-width: 100px;
+}
+
+.container-fluid {
+  height: 100vh;
+}
+
+.navbar-nav {
+  height: 82vh;
+}
+
+.logo-1 {
+  display: none;
+}
+
+.nav-link {
+  color: #f1f8fa;
+  font-weight: bold;
+  font-size: 18px;
+
+  &:hover {
+    color: rgb(151, 255, 177);
+  }
+}
+
+.nav-link.active {
+  color: rgb(0, 255, 64);
+}
+
+.bg-fitwell {
+  background-color: #1e1e21;
+}
+
+.title-nav {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .title-nav {
+    display: inline;
+  }
+
+  .logo-1 {
+    display: inline-block;
+  }
+
+  .logo-2 {
+    display: none;
+  }
+
+  .navbar,
+  .container-fluid {
+    height: 100vh;
+    min-width: 280px;
+  }
+}

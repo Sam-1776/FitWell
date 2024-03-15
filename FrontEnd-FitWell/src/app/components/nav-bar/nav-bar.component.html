@@ -1,0 +1,107 @@
+<nav class="navbar navbar-expand bg-fitwell position-fixed">
+    <div
+      class="container-fluid d-flex justify-content-center align-items-start border-end border-white"
+    >
+      <div class="flex flex-column py-5 align-items-center">
+        <a class="navbar-brand m-0 d-flex justify-content-center" href="#">
+          <img
+            src="../../../assets/LogoApp.png"
+            alt="Logo FitWell"
+            width="200px"
+            class="logo-1"
+          />
+          <img
+            src="../../../assets/logoPiccolo.png"
+            alt="Logo FitWell Min"
+            width="50px"
+            class="logo-2"
+          />
+        </a>
+  
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul
+            class="navbar-nav w-100 d-flex flex-column align-content-between justify-content-between"
+          >
+            <div
+              class="d-flex flex-column py-5 gap-3 align-items-center align-items-md-start"
+            >
+              <li class="nav-item" *ngIf="user">
+                <a
+                  class="nav-link"
+                  [routerLink]="['/']"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                >
+                  <i class="bi bi-house-door-fill"></i>
+                  <span class="title-nav"> Home</span>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="user">
+                <a
+                  class="nav-link"
+                  [routerLink]="['/profile']"
+                  routerLinkActive="active"
+                >
+                  <i class="bi bi-person-circle"></i>
+                  <span class="title-nav"> Profilo</span>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="user">
+                <a
+                  class="nav-link"
+                  [routerLink]="['/backoffice']"
+                  routerLinkActive="active"
+                >
+                  <i class="bi bi-plus-circle"></i>
+                  <span class="title-nav"> Crea Post</span>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="!user">
+                <a
+                  class="nav-link"
+                  [routerLink]="['/login']"
+                  routerLinkActive="active"
+                >
+                  <i class="bi bi-person-check"></i>
+                  <span class="title-nav"> Login</span>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="!user">
+                <a
+                  class="nav-link"
+                  [routerLink]="['/register']"
+                  routerLinkActive="active"
+                >
+                  <i class="bi bi-person-plus"></i>
+                  <span class="title-nav"> Register</span>
+                </a>
+              </li>
+            </div>
+            <div>
+              <li
+                class="nav-item d-flex justify-content-center justify-content-md-start"
+                *ngIf="user"
+              >
+                <a
+                  class="nav-link"
+                  [routerLink]="['/assistenza']"
+                  routerLinkActive="active"
+                >
+                  <i class="bi bi-question-circle"></i>
+                  <span class="title-nav"> Segnalazioni</span>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="user">
+                <button class="btn text-dark m-0 p-2" (click)="logout()">
+                  <i
+                    class="bi bi-box-arrow-left bg-info p-3 rounded-2 d-flex align-self-center fs-5"
+                  ></i>
+                </button>
+              </li>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
