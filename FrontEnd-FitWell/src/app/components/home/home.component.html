@@ -1,1 +1,57 @@
-<p>home works!</p>
+<div class="conteiner-fluid" id="page">
+  <div class="row m-0 p-0">
+    <h1 class="ms-4 mt-4 pe-0">Dashboard</h1>
+    <div class="container mt-3" id="data">
+      <div
+        class="card m-4 bg-transparent"
+        style="max-width: 900px; max-height: 181px"
+      >
+        <div class="row g-0">
+          <div class="col-md-3">
+            <img
+              src="{{ user.avatar }}"
+              class="img-fluid rounded-circle ms-4"
+              alt="avatar user"
+              id="avatar"
+            />
+          </div>
+          <div class="col-md-9">
+            <div class="card-body text-light">
+              <h5 class="card-title">{{ user.name }} {{ user.surname }}</h5>
+              <div class="continer">
+                <div class="row">
+                  <div class="col-md-6">
+                    <ul>
+                      <li>Gender: {{ user.gender }}</li>
+                      <li>Weight: {{ user.noteBookD.weight }}</li>
+                      <li>Basal Metabolic Rate: {{ user.noteBookD.rmr }}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid p-0 mx-0 my-3 text-light" id="news">
+    <h4 class="m-3 display-6">News</h4>
+  </div>
+
+  <div class="container-fluid mx-0 mt-3 pb-4" id="stats">
+    <div class="row justify-content-around">
+      <div class="col-5" id="workout">
+        <div>
+          <canvas id="statsWorkout" class="text-light"></canvas>
+        </div>
+      </div>
+      <div class="col-5" id="diet">
+        <div>
+          <canvas id="statsDiet"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

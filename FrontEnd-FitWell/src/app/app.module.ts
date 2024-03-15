@@ -6,7 +6,6 @@ import { TokenInterceptor } from './auth/token.interceptor';
 import { FormsModule ,ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from './auth/auth.guard';
 
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -57,7 +56,8 @@ const routes: Route[] = [
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
-    }
+    },
+
   ],
   bootstrap: [AppComponent]
 })

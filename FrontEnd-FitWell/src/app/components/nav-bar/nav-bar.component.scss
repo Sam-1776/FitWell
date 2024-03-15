@@ -30,6 +30,11 @@
   color: rgb(0, 255, 64);
 }
 
+#logout{
+    color: rgb(0, 255, 64);
+    background-color: transparent;
+}
+
 .bg-fitwell {
   background-color: #1e1e21;
 }
@@ -50,6 +55,11 @@
   .logo-2 {
     display: none;
   }
+
+  #logout{
+   color: #1e1e21;
+   background-color: rgb(0, 255, 64);
+}
 
   .navbar,
   .container-fluid {

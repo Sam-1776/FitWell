@@ -1,11 +1,11 @@
 .router {
-    width: calc(100vw - 118px);
+    width: calc(100% - 99px);
     min-height: 100vh;
   }
   
   @media screen and (min-width: 768px) {
     .router {
-      width: calc(100vw - 296px);
+      width: calc(100% - 279px);
       min-height: 100vh;
     }
   }
