@@ -12,6 +12,8 @@ Chart.register(...registerables);
 })
 export class HomeComponent implements OnInit {
   user!: User;
+  days!: { name: string; isToday: boolean; borderClass: string }[];
+  today!: string;
 
   constructor(private userSrv: UserService) {}
 
@@ -19,6 +21,8 @@ export class HomeComponent implements OnInit {
     this.getUser();
     this.getStatsW();
     this.getStatsD();
+    this.days = this.generateWeekDays();
+    this.today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
   }
 
   getUser() {
@@ -83,5 +87,23 @@ export class HomeComponent implements OnInit {
         },
       },
     });
+  }
+
+
+  generateWeekDays(): { name: string; isToday: boolean; borderClass: string }[] {
+    const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+    const days: { name: string; isToday: boolean; borderClass: string }[] = [];
+
+    for (let i = 0; i < 7; i++) {
+      const index = i % 7;
+      const dayName = weekdays[index];
+      const isToday = (dayName === today);
+      const borderClass = isToday ? 'today-border' : ''; // Aggiunta della classe per i bordi del giorno odierno
+
+      days.push({ name: dayName, isToday: isToday, borderClass: borderClass });
+    }
+
+    return days;
   }
 }
