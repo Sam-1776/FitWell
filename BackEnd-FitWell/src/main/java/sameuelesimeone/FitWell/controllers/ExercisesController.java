@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import sameuelesimeone.FitWell.models.Exercise;
 import sameuelesimeone.FitWell.services.ExerciseService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +25,12 @@ public class ExercisesController {
                                           @RequestParam(defaultValue = "10") int size,
                                           @RequestParam(defaultValue = "id") String orderBy){
         return exerciseService.getExercises(page, size, orderBy);
+    }
+
+    @GetMapping("/find")
+    @PreAuthorize("hasAnyAuthority('USER', 'COACH', 'ADMIN')")
+    public List<Exercise> getByName(@RequestParam String str){
+        return exerciseService.findByNameContaining(str);
     }
 
     @GetMapping("/{exerciseId}")

@@ -1,7 +1,7 @@
 <div class="conteiner-fluid position-relative" id="page">
   <p>workouts works!</p>
-  <div class="row m-4" *ngFor="let item of cardWorkout">
-    <div class="col-4">
+  <div class="row m-4">
+    <div class="col-4" *ngFor="let item of cardWorkout">
       <div class="card" style="width: 18rem">
         <div class="card-body">
           <h5 class="card-title">{{ item.name }}</h5>
@@ -27,7 +27,14 @@
     >
       Generate
     </button>
-    <button class="btn btn-success ms-2">Add</button>
+    <button
+      type="button"
+      class="btn btn-success ms-2"
+      data-bs-toggle="modal"
+      data-bs-target="#addCardWorkout"
+    >
+      Add
+    </button>
   </div>
 
   <div
@@ -38,23 +45,96 @@
     aria-hidden="true"
   >
     <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content text-bg-dark">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="generateCardLabel">Generate Card</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close text-light"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
         </div>
         <div class="modal-body">
-          <form></form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">
-            Confirm
-          </button>
+          <form [formGroup]="generateCard" (ngSubmit)="generate()">
+            <div class="mb-3">
+              <label for="inputName" class="form-label">Name: </label>
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                id="inputName"
+                formControlName="name"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="inputMuscle" class="form-label">Muscle</label>
+              <select
+                class="form-select"
+                aria-label="Default select example"
+                id="inputMuscle"
+                name="partMuscle"
+                formControlName="partMuscle"
+              >
+                <option value="" disabled selected>Select Muscle</option>
+                <option value="upper">Upper</option>
+                <option value="back">Back</option>
+                <option value="lower">Lower</option>
+                <option value="total">Total</option>
+                <option value="warm">Warm</option>
+              </select>
+            </div>
+            <div class="mb-3" *ngIf="muscle == 'warm'">
+              <label for="inputType" class="form-label">Type</label>
+              <select
+                class="form-select"
+                aria-label="Default select example"
+                id="inputType"
+                name="type"
+                formControlName="type"
+              >
+                <option value="" disabled selected>Select Type</option>
+                <option value="cardio">Cardio</option>
+                <option value="plyometrics">Plyometrics</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="inputexp" class="form-label">Exp</label>
+              <select
+                class="form-select"
+                aria-label="Default select example"
+                id="inputexp"
+                name="exp"
+                formControlName="exp"
+              >
+                <option value="" disabled selected>Select Exp</option>
+                <option value="low">Low</option>
+                <option value="mid">Mid</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div
+              class="mb-3"
+              *ngIf="muscle == 'lower' || muscle == 'total' || muscle == 'warm'"
+            >
+              <label for="inputWeight" class="form-label">Weight: </label>
+              <input
+                type="number"
+                name="weight"
+                class="form-control"
+                id="inputWeight"
+                formControlName="weight"
+                min="0"
+              />
+            </div>
+            <button
+              type="submit"
+              class="btn btn-success"
+              data-bs-dismiss="modal"
+            >
+              Confirm
+            </button>
+          </form>
         </div>
       </div>
     </div>

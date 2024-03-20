@@ -193,7 +193,12 @@ public class WorkoutService {
     // Metodo di supporto per aggiungere un esercizio unico alla lista
     private void addUniqueExercise(List<Workout> workoutList, GenerateCardDTO generateCardDTO, String muscle, String category, int iter) {
         for (int i = 0; i < iter; i++) {
-            Workout workout = generateByExp(generateCardDTO.exp(), muscle, category, generateCardDTO.weight());
+            Workout workout = new Workout();
+            if (generateCardDTO.weight() == null){
+                workout = generateByExp(generateCardDTO.exp(), muscle, category, 0);
+            }else {
+                workout = generateByExp(generateCardDTO.exp(), muscle, category, generateCardDTO.weight());
+            }
             if (!workoutList.contains(workout)) {
                 workoutList.add(workout);
             } else {

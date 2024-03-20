@@ -106,4 +106,8 @@ public class ExerciseService {
         int count = rdm.nextInt(exerciseList.size());
         return exerciseList.get(count);
     }
+
+    public List<Exercise> findByNameContaining(String str){
+        return exerciseDAO.findByNameContaining(str);
+    }
 }
