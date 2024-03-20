@@ -1,0 +1,62 @@
+<div class="conteiner-fluid position-relative" id="page">
+  <p>workouts works!</p>
+  <div class="row m-4" *ngFor="let item of cardWorkout">
+    <div class="col-4">
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.name }}</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">
+            <i class="bi bi-stopwatch"></i> {{ item.restTimer }}
+          </h6>
+          <ul class="list-group" *ngFor="let workout of item.workouts">
+            <li class="list-group-item">{{ workout.exercise.name }}</li>
+          </ul>
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="position-absolute" id="addCard">
+    <button
+      type="button"
+      class="btn btn-success"
+      data-bs-toggle="modal"
+      data-bs-target="#generateCard"
+    >
+      Generate
+    </button>
+    <button class="btn btn-success ms-2">Add</button>
+  </div>
+
+  <div
+    class="modal fade"
+    id="generateCard"
+    tabindex="-1"
+    aria-labelledby="generateCardLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="generateCardLabel">Generate Card</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form></form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

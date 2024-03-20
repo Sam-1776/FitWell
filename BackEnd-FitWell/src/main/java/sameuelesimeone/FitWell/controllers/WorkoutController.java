@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/workout")
+@CrossOrigin(origins = "http://localhost:4200")
 public class WorkoutController {
 
     @Autowired

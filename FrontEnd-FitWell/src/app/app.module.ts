@@ -11,6 +11,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { HomeComponent } from './components/home/home.component';
+import { WorkoutsComponent } from './components/workouts/workouts.component';
 
 const routes: Route[] = [
   {
@@ -20,6 +21,11 @@ const routes: Route[] = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'workout',
+    component: WorkoutsComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: '',
@@ -42,7 +48,8 @@ const routes: Route[] = [
     LoginComponent,
     RegisterComponent,
     NavBarComponent,
-    HomeComponent
+    HomeComponent,
+    WorkoutsComponent
   ],
   imports: [
     BrowserModule,
