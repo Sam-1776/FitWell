@@ -23,4 +23,19 @@ export class WorkoutService {
       })
     );
   }
+
+  getWorkout(id: string){
+    return this.http.get<Workout>(`${this.workoutUrl}/${id}`);
+  }
+
+  modWorkout(id: string, data:{
+    exerciseId: string,
+    setId: string[]
+  }){
+    return this.http.patch<Workout>(`${this.workoutUrl}/${id}`, data).pipe(
+      tap(el =>{
+        this.workoutId.push(el.id);
+      })
+    );
+  }
 }

@@ -1,0 +1,22 @@
+<p>details-exercise works!</p>
+<div class="conteiner-fluid position-relative" id="page">
+    <ul class="list-group" *ngFor="let set of workout.sets">
+        <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+                <p>Rep:{{ set.rep }}</p>
+                <p>Weight:{{set.weight}}</p>
+            </div>
+            </li>
+      </ul>
+
+      <div class="container-fluid mx-0 mt-3 pb-4" id="stats">
+        <div class="row justify-content-around">
+          <div class="col-8" id="workout">
+            <div>
+              <canvas id="statsWorkout" class="m-3"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+

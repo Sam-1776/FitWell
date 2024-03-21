@@ -16,6 +16,10 @@ export class CardWorkoutService {
     return this.http.get<CardWorkout[]>(this.cardUrl);
   }
 
+  getSingleCard(id: string){
+    return this.http.get<CardWorkout>(`${this.cardUrl}/${id}`);
+  }
+
   generateAutoCard(data:{
     name: string;
     partMuscle: string;

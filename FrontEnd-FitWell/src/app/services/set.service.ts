@@ -23,4 +23,15 @@ export class SetService {
       })
     )
   }
+
+  modSet(id: string, data:{
+    rep: number,
+    weight: number
+  }){
+    return this.http.patch<Set>(`${this.setUrl}/${id}`, data).pipe(
+      tap((el) =>{
+        this.idString.push(el.id);
+      })
+    )
+  }
 }

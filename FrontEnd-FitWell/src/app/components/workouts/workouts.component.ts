@@ -119,5 +119,9 @@ export class WorkoutsComponent implements OnInit, DoCheck {
     
   }
 
+  changePage(id: string){
+    this.router.navigate(['/details/',id]);
+  }
+
 
 }

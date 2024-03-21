@@ -1,8 +1,7 @@
 <div class="conteiner-fluid position-relative" id="page">
-  <p>workouts works!</p>
-  <div class="row m-4">
+  <div class="row">
     <div class="col-4" *ngFor="let item of cardWorkout">
-      <div class="card" style="width: 18rem">
+      <div class="card" style="width: 18rem" (click)="changePage(item.id)">
         <div class="card-body">
           <h5 class="card-title">{{ item.name }}</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">
@@ -11,8 +10,6 @@
           <ul class="list-group" *ngFor="let workout of item.workouts">
             <li class="list-group-item">{{ workout.exercise.name }}</li>
           </ul>
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
         </div>
       </div>
     </div>

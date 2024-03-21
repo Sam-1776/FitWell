@@ -1,33 +1,47 @@
 <div class="container">
-    <form [formGroup]="newWorkoutForm" (ngSubmit)="saveNew()">
-      <div class="mb-3">
-        <label for="inputExercises" class="form-label">Exercise: </label>
-        <input
-          type="text"
-          name="exercise"
-          class="form-control"
-          id="inputExercises"
-          formControlName="exercise"
-          (change)="searchByName()"
-        />
-        <select
+  <form [formGroup]="newWorkoutForm" (ngSubmit)="saveNew()">
+    <div class="mb-3">
+      <label for="inputExercises" class="form-label">Exercise: </label>
+      <input
+        type="text"
+        name="exercise"
+        class="form-control"
+        id="inputExercises"
+        formControlName="exercise"
+        (change)="searchByName()"
+      />
+      <select
         class="form-select"
         aria-label="Default select example"
         id="inputIdExercise"
         name="idExercise"
         formControlName="idExercise"
+        *ngIf="!id"
       >
         <option value="" disabled selected>Select exercise</option>
-        <option value={{exercise.id}} *ngFor="let exercise of exercises">{{exercise.name}}</option>
+        <option value="{{ exercise.id }}" *ngFor="let exercise of exercises">
+          {{ exercise.name }}
+        </option>
       </select>
-      <div class="accordion mb-3" id="Set">
+      <div class="accordion mb-3" id="Set" *ngIf="!id;else templateName">
         <div class="accordion-item" *ngFor="let panel of panels; let i = index">
           <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#Setcollapse' + i" aria-expanded="true" [attr.aria-controls]="'collapse' + i">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#Setcollapse' + i"
+              aria-expanded="true"
+              [attr.aria-controls]="'collapse' + i"
+            >
               Set #{{ panel }}
             </button>
           </h2>
-          <div [id]="'Setcollapse' + i" class="accordion-collapse collapse show" data-bs-parent="#Set">
+          <div
+            [id]="'Setcollapse' + i"
+            class="accordion-collapse collapse show"
+            data-bs-parent="#Set"
+          >
             <div class="accordion-body">
               <ng-container>
                 <app-sets></app-sets>
@@ -36,8 +50,51 @@
           </div>
         </div>
       </div>
-      <button type="button" class="btn btn-outline-light" (click)="addPanel()">Add Set</button>
-      </div> 
-         <button type="submit" class="btn btn-success">Confirm</button>
-    </form>
+      <button
+        type="button"
+        class="btn btn-outline-light"
+        (click)="addPanel()"
+        *ngIf="!id"
+      >
+        Add Set
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-light"
+        (click)="addSet()"
+      >
+        Add Set
+      </button>
+    </div>
+    <button type="submit" class="btn btn-success" *ngIf="!id">Confirm</button>
+    <button type="button" class="btn btn-info" (click)="modWorkout()">Mod workout</button>
+  </form>
 </div>
+
+<ng-template #templateName>
+  <div class="accordion-item" *ngFor="let item of setList let i = index">
+    <h2 class="accordion-header">
+      <button
+        class="accordion-button"
+        type="button"
+        data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#Setcollapse' + i"
+        aria-expanded="true"
+        [attr.aria-controls]="'collapse' + i"
+      >
+        Set #{{ i }}
+      </button>
+    </h2>
+    <div
+      [id]="'Setcollapse' + i"
+      class="accordion-collapse collapse show"
+      data-bs-parent="#Set"
+    >
+      <div class="accordion-body">
+        <ng-container>
+          <app-sets [setList]="setList" [index]="i"></app-sets>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,118 @@
+<div class="conteiner-fluid position-relative" id="page">
+  <h2>{{ card.restTimer }}</h2>
+  <div class="row p-0 m-0">
+    <div class="col-4" *ngFor="let item of card.workouts">
+      <div class="card" style="width: 18rem">
+        <div class="card-body" (click)="exerciseDetails(item.id)">
+          <h5 class="card-title">{{ item.exercise.name }}</h5>
+          <ul class="list-group" *ngFor="let set of item.sets">
+            <li class="list-group-item">
+              Rep:{{ set.rep }} Weight:{{ set.weight }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button
+          type="button"
+            class="btn btn-outline-info"
+            data-bs-toggle="modal"
+            data-bs-target="#ModifyCard"
+          >
+            Modify
+          </button>
+</div>
+
+<div
+  class="modal fade"
+  id="ModifyCard"
+  tabindex="-1"
+  aria-labelledby="addCardWorkoutLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content text-bg-dark">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addCardWorkoutLabel">
+          Mod Card Workout
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="ModCard">
+          <div class="mb-3">
+            <label for="inputName" class="form-label">Name: </label>
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              id="inputName"
+              formControlName="name"
+            />
+          </div>
+          <div class="accordion" id="Workout" class="mb-3">
+            <div
+              class="accordion-item"
+              *ngFor="let panel of card.workouts; let i = index"
+            >
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#Workoutcollapse' + i"
+                  aria-expanded="true"
+                  [attr.aria-controls]="'collapse' + i"
+                >
+                  Workout #{{ i }}
+                </button>
+              </h2>
+              <div
+                [id]="'Workoutcollapse' + i"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#Workout"
+              >
+                <div class="accordion-body">
+                  <ng-container>
+                    <app-workout [exercisesName]="exercisesName" [index]="i" [cardByParent]="card"></app-workout>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="inputRestTimer" class="form-label">RestTimer: </label>
+            <input
+              type="number"
+              name="restTimer"
+              class="form-control"
+              id="inputRestTimer"
+              formControlName="restTimer"
+              min="1"
+            />
+          </div>
+          <!-- <div class="mb-3" *ngIf="user?.role?.includes('COACH')">
+            <label for="inputUser" class="form-label">user_id: </label>
+            <input
+              type="text"
+              name="user_id"
+              class="form-control"
+              id="inputUser"
+              formControlName="user_id"
+            />
+          </div> -->
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Save card</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
