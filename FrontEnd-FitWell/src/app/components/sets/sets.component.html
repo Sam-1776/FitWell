@@ -1,0 +1,27 @@
+<div class="container">
+    <form [formGroup]="newSet" (ngSubmit)="saveNewSet()">
+      <div class="mb-3">
+        <label for="inputRep" class="form-label">Rep: </label>
+        <input
+          type="number"
+          name="rep"
+          class="form-control"
+          id="inputRep"
+          formControlName="rep"
+          min="1"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="inputweight" class="form-label">Weight: </label>
+        <input
+          type="number"
+          name="weight"
+          class="form-control"
+          id="inputweight"
+          formControlName="weight"
+          min="1"
+        />
+      </div>
+      <button type="submit" class="btn btn-success">Save set</button>
+    </form> 
+</div>  

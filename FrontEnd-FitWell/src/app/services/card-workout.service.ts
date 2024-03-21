@@ -25,4 +25,14 @@ export class CardWorkoutService {
   }){
     return this.http.post<CardWorkout>(`${this.cardUrl}/generate`, data);
   }
+
+  saveNewCard(data:{
+    name: string
+    workouts_id: string[],
+    restTimer: number,
+    user_id?: string,
+    coach_id?: string
+  }){
+    return this.http.post<CardWorkout>(this.cardUrl, data);
+  }
 }

@@ -12,6 +12,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { HomeComponent } from './components/home/home.component';
 import { WorkoutsComponent } from './components/workouts/workouts.component';
+import { WorkoutComponent } from './components/workout/workout.component';
+import { SetsComponent } from './components/sets/sets.component';
 
 const routes: Route[] = [
   {
@@ -49,7 +51,9 @@ const routes: Route[] = [
     RegisterComponent,
     NavBarComponent,
     HomeComponent,
-    WorkoutsComponent
+    WorkoutsComponent,
+    WorkoutComponent,
+    SetsComponent
   ],
   imports: [
     BrowserModule,

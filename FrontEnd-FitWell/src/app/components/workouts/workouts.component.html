@@ -140,3 +140,81 @@
     </div>
   </div>
 </div>
+
+<div
+  class="modal fade"
+  id="addCardWorkout"
+  tabindex="-1"
+  aria-labelledby="addCardWorkoutLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content text-bg-dark">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addCardWorkoutLabel">Add New Card Workout</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="AddCardForm" (ngSubmit)="savenewCard()">
+          <div class="mb-3">
+            <label for="inputName" class="form-label">Name: </label>
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              id="inputName"
+              formControlName="name"
+            />
+          </div>  
+          <div class="accordion" id="Workout" class="mb-3">
+            <div class="accordion-item" *ngFor="let panel of panels; let i = index">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#Workoutcollapse' + i" aria-expanded="true" [attr.aria-controls]="'collapse' + i">
+                  Workout #{{ panel }}
+                </button>
+              </h2>
+              <div [id]="'Workoutcollapse' + i" class="accordion-collapse collapse show" data-bs-parent="#Workout">
+                <div class="accordion-body">
+                  <ng-container>
+                    <app-workout></app-workout>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="inputRestTimer" class="form-label">RestTimer: </label>
+            <input
+              type="number"
+              name="restTimer"
+              class="form-control"
+              id="inputRestTimer"
+              formControlName="restTimer"
+              min="1"
+            />
+          </div>  
+          <div class="mb-3" *ngIf="user?.role?.includes('COACH')">
+            <label for="inputUser" class="form-label">user_id: </label>
+            <input
+              type="text"
+              name="user_id"
+              class="form-control"
+              id="inputUser"
+              formControlName="user_id"
+            />
+          </div>  
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" (click)="addPanel()">Add Exercise</button>
+            <button type="submit" class="btn btn-success">Save card</button>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>

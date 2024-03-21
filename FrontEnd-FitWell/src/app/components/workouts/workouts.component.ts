@@ -1,11 +1,14 @@
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthData } from 'src/app/auth/auth-data';
+import { AuthService } from 'src/app/auth/auth.service';
 import { CardWorkout } from 'src/app/models/card-workout';
 import { Exercise } from 'src/app/models/exercise';
 import { PageExercise } from 'src/app/models/page-exercise';
 import { CardWorkoutService } from 'src/app/services/card-workout.service';
 import { ExerciseService } from 'src/app/services/exercise.service';
+import { WorkoutService } from 'src/app/services/workout.service';
 
 @Component({
   selector: 'app-workouts',
@@ -13,31 +16,31 @@ import { ExerciseService } from 'src/app/services/exercise.service';
   styleUrls: ['./workouts.component.scss'],
 })
 export class WorkoutsComponent implements OnInit, DoCheck {
-  pageExercise!: PageExercise;
-  exercises!: Exercise[];
+  
   cardWorkout!: CardWorkout[];
   generateCard!: FormGroup;
+  AddCardForm!: FormGroup;
   muscle!: string;
+  user!: AuthData | null;
 
-  showForm = false;
-  dynamicForm!: FormGroup;
-  accordionSets: { id: number, showForm: boolean, dynamicForm: FormGroup }[] = [];
-  nextId = 0;
-  accordionWorkouts: { id: number, accordionSets: { id: number, showForm: boolean, dynamicForm: FormGroup }[] }[] = [];
-  nextWorkoutId = 0;
+  workoutsId: string[] = [];
 
-
-  filteredExercise!: Exercise[];
-  selectExercise!: string;
+  panels: number[] = [];
 
   constructor(
-    private exerciseSrv: ExerciseService,
     private cardSrv: CardWorkoutService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private workoutSrv: WorkoutService,
+    private authSrv: AuthService
   ) {}
   ngDoCheck(): void {
     this.muscle = this.generateCard.controls['partMuscle'].value;
+    this.workoutSrv.workoutId.forEach(el =>{
+      if (!this.workoutsId.includes(el)) {
+        this.workoutsId.push(el);
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -48,15 +51,20 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       type: [null],
       weight: [null],
     });
-    this.getExercise();
+    this.AddCardForm = this.fb.group({
+      name: [null, Validators.required],
+      workoutsId: [null],
+      restTimer:[null],
+      user_id: [null],
+      coach_id: [null]
+    })
+
     this.getCardWorkout();
+    this.getUser();
   }
 
-  getExercise() {
-    this.exerciseSrv.getAllExercise().subscribe((page: PageExercise) => {
-      this.exercises = page.content;
-      console.log(this.exercises);
-    });
+  addPanel() {
+    this.panels.push(this.panels.length + 1);
   }
 
   getCardWorkout() {
@@ -81,60 +89,35 @@ export class WorkoutsComponent implements OnInit, DoCheck {
     }
   }
 
-
-  createAccordionWorkout() {
-    const dynamicForm = this.fb.group({
-      name: ['', Validators.required]
-    });
-
-    const newWorkout = {
-      id: this.nextWorkoutId++,
-      accordionSets: [{ id: 0, showForm: true, dynamicForm: this.createDynamicForm() }]
-    };
-
-    this.accordionWorkouts.push(newWorkout);
-  }
-
-
-
-  createAccordionSet(workoutId: number) {
-    const newSet = {
-      id: this.accordionWorkouts[workoutId].accordionSets.length,
-      showForm: true,
-      dynamicForm: this.createDynamicForm()
-    };
-
-    this.accordionWorkouts[workoutId].accordionSets.push(newSet);
-  }
-
-  createDynamicForm() {
-    return this.fb.group({
-      rep: [0, Validators.required],
-      weight: [0, Validators.required]
+  getUser(){
+    this.authSrv.user$.subscribe((user) => {
+      this.user = user;
     });
   }
 
-  submitForm(form: FormGroup) {
-    if (form.valid) {
-      console.log(form.value);
-    }
-  }
-  searchByName(): void {
 
-    this.selectExercise = this.accordionWorkouts[0].accordionSets[0].dynamicForm.controls['exerciseSelect'].value;
-    console.log(this.selectExercise);
+  savenewCard(){
+    const data = {
+      name: this.AddCardForm.controls['name'].value,
+      workouts_id: this.workoutsId,
+      restTimer: this.AddCardForm.controls['restTimer'].value,
+    };
     
-      // Effettua la ricerca solo se è stato selezionato un esercizio
-      this.exerciseSrv.getByName(this.selectExercise).subscribe(
-        (list: Exercise[]) => {
-          this.exercises = list; 
-          console.log(this.exercises);
-          // Assegna la lista di esercizi ottenuta dall'API all'array exercises
-        },
-        (error) => {
-          console.error('Errore durante il recupero degli esercizi', error);
-        }
-      );
+    /* if (this.user?.role.includes('COACH')) {
+      data['setId'] = this.setId;
+    } */
+
+    console.log(data);
+    try{
+      this.cardSrv.saveNewCard(data).subscribe();
+    }catch(err){
+      console.log(err);
+    }finally{
+      this.workoutSrv.workoutId = [];
+      this.workoutsId = [];
+    }
+    
   }
+
 
 }
