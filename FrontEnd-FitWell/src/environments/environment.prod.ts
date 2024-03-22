@@ -7,5 +7,6 @@ export const environment = {
   setUrl: 'http://localhost:4201/set',
   workoutUrl: 'http://localhost:4201/workout',
   cardWorkoutUrl: 'http://localhost:4201/card_workout',
-  statsUrl: 'http://localhost:4201/stat'
+  statsUrl: 'http://localhost:4201/stat',
+  dietUrl: 'http://localhost:4201/diet'
 };
