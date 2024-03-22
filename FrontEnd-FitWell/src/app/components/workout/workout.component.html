@@ -16,7 +16,7 @@
         id="inputIdExercise"
         name="idExercise"
         formControlName="idExercise"
-        *ngIf="!id"
+        *ngIf="!id || cardByParent.workouts[cardByParent.workouts.length - 1].id == '0' && cardByParent.workouts.length - 1 === index"
       >
         <option value="" disabled selected>Select exercise</option>
         <option value="{{ exercise.id }}" *ngFor="let exercise of exercises">
@@ -66,7 +66,7 @@
         Add Set
       </button>
     </div>
-    <button type="submit" class="btn btn-success" *ngIf="!id">Confirm</button>
+    <button type="submit" class="btn btn-success" *ngIf="!id || cardByParent.workouts[cardByParent.workouts.length - 1].id == '0' && cardByParent.workouts.length - 1 === index">Confirm</button>
     <button type="button" class="btn btn-info" (click)="modWorkout()">Mod workout</button>
   </form>
 </div>

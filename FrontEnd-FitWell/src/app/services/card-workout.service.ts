@@ -39,4 +39,14 @@ export class CardWorkoutService {
   }){
     return this.http.post<CardWorkout>(this.cardUrl, data);
   }
+
+  modCard(id: string, data:{
+    name: string
+    workouts_id: string[],
+    restTimer: number,
+    user_id?: string,
+    coach_id?: string
+  }){
+    return this.http.patch<CardWorkout>(`${this.cardUrl}/${id}`,data)
+  }
 }

@@ -46,7 +46,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="ModCard">
+        <form [formGroup]="ModCard" (ngSubmit)="modWorkout()">
           <div class="mb-3">
             <label for="inputName" class="form-label">Name: </label>
             <input
@@ -109,7 +109,8 @@
             />
           </div> -->
           <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Save card</button>
+            <button type="button" class="btn btn-outline-light" (click)="addWorkout()">Add Exercise</button>
+            <button type="submit" class="btn btn-success">Mod card</button>
           </div>
         </form>
       </div>
