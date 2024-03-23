@@ -2,7 +2,7 @@
     <div
       class="container-fluid d-flex justify-content-center align-items-start border-end border-white"
     >
-      <div class="flex flex-column py-5 align-items-center">
+      <div class="flex flex-column py-4 align-items-center">
         <a class="navbar-brand m-0 d-flex justify-content-center" href="#">
           <img
             src="../../../assets/LogoApp.png"
@@ -32,28 +32,48 @@
                   routerLinkActive="active"
                   [routerLinkActiveOptions]="{ exact: true }"
                 >
-                  <i class="bi bi-house-door-fill"></i>
-                  <span class="title-nav"> Home</span>
+                  <i class="bi bi-grid"></i>
+                  <span class="title-nav"> Dashboard</span>
                 </a>
               </li>
               <li class="nav-item" *ngIf="user">
                 <a
                   class="nav-link"
-                  [routerLink]="['/profile']"
+                  [routerLink]="['/workout']"
                   routerLinkActive="active"
                 >
-                  <i class="bi bi-person-circle"></i>
-                  <span class="title-nav"> Profilo</span>
+                  <i class="fas fa-dumbbell"></i>
+                  <span class="title-nav"> Workout</span>
                 </a>
               </li>
-              <li class="nav-item" *ngIf="user">
+              <li class="nav-item" *ngIf="user?.role?.includes('COACH')">
                 <a
                   class="nav-link"
                   [routerLink]="['/backoffice']"
                   routerLinkActive="active"
                 >
-                  <i class="bi bi-plus-circle"></i>
-                  <span class="title-nav"> Crea Post</span>
+                  <i class="bi bi-card-text"></i>
+                  <span class="title-nav"> Workout cards</span>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="user">
+                <a
+                  class="nav-link"
+                  [routerLink]="['/diet']"
+                  routerLinkActive="active"
+                >
+                  <i class="fas fa-utensils"></i>
+                  <span class="title-nav"> Diet</span>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="user?.role?.includes('NUTRITIONIST')">
+                <a
+                  class="nav-link"
+                  [routerLink]="['/backoffice']"
+                  routerLinkActive="active"
+                >
+                  <i class="bi bi-card-list"></i>
+                  <span class="title-nav"> Diets list</span>
                 </a>
               </li>
               <li class="nav-item" *ngIf="!user">
@@ -94,7 +114,7 @@
               <li class="nav-item" *ngIf="user">
                 <button class="btn text-dark m-0 p-2" (click)="logout()">
                   <i
-                    class="bi bi-box-arrow-left bg-info p-3 rounded-2 d-flex align-self-center fs-5"
+                    class="bi bi-box-arrow-left p-3 rounded-2 d-flex align-self-center fs-5" id="logout"
                   ></i>
                 </button>
               </li>

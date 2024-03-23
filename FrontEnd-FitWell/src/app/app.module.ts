@@ -6,12 +6,18 @@ import { TokenInterceptor } from './auth/token.interceptor';
 import { FormsModule ,ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from './auth/auth.guard';
 
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { HomeComponent } from './components/home/home.component';
+import { WorkoutsComponent } from './components/workouts/workouts.component';
+import { WorkoutComponent } from './components/workout/workout.component';
+import { SetsComponent } from './components/sets/sets.component';
+import { DetailsCardComponent } from './components/details-card/details-card.component';
+import { DetailsExerciseComponent } from './components/details-exercise/details-exercise.component';
+import { DietComponent } from './components/diet/diet.component';
+import { DietDetailsComponent } from './components/diet-details/diet-details.component';
 
 const routes: Route[] = [
   {
@@ -21,6 +27,31 @@ const routes: Route[] = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'workout',
+    component: WorkoutsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'diet',
+    component: DietComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'dietDetails/:id',
+    component: DietDetailsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'details/:id',
+    component: DetailsCardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'exDetails/:id',
+    component: DetailsExerciseComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: '',
@@ -43,7 +74,14 @@ const routes: Route[] = [
     LoginComponent,
     RegisterComponent,
     NavBarComponent,
-    HomeComponent
+    HomeComponent,
+    WorkoutsComponent,
+    WorkoutComponent,
+    SetsComponent,
+    DetailsCardComponent,
+    DetailsExerciseComponent,
+    DietComponent,
+    DietDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +95,8 @@ const routes: Route[] = [
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
-    }
+    },
+
   ],
   bootstrap: [AppComponent]
 })

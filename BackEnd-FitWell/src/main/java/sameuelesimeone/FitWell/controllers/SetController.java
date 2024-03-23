@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/set")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SetController {
 
     @Autowired

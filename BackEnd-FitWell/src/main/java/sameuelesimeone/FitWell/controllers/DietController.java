@@ -18,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/diet")
+@CrossOrigin(origins = "http://localhost:4200")
 public class DietController {
 
     @Autowired
@@ -39,7 +40,7 @@ public class DietController {
     }
 
     @GetMapping("/{dietId}")
-    @PreAuthorize("hasAnyAuthority('NUTRITIONIST', 'USER', , 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('NUTRITIONIST', 'USER', 'ADMIN')")
     public Diet findById(@PathVariable UUID dietId){
         return dietService.findById(dietId);
     }

@@ -13,6 +13,8 @@ import java.util.UUID;
 @Repository
 public interface ExerciseDAO extends JpaRepository<Exercise, UUID> {
     Exercise findByName(String name);
+
+    List<Exercise> findByNameContaining(String str);
     List<Exercise> findByTypeAndMuscle(Type type, Muscle muscle);
 
     List<Exercise> findByType(Type type);

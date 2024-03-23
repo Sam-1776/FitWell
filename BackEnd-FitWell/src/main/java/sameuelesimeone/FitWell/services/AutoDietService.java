@@ -153,7 +153,11 @@ public class AutoDietService {
 
 
     public int RMR(AutoDietDTO dietDTO){
-        return RMRByAgeMan(dietDTO.age(), dietDTO.weight());
+        if (dietDTO.gender().toLowerCase().equals("man")){
+            return RMRByAgeMan(dietDTO.age(), dietDTO.weight());
+        }else {
+            return RMRByAgeWoman(dietDTO.age(), dietDTO.weight());
+        }
     }
 
     public int generatekCalDaily(AutoDietDTO diet){

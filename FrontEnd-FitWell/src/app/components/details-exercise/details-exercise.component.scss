@@ -1,0 +1,18 @@
+#page{
+    background-color: #f1f8fa;
+    height: 100vh;
+    width: 100%;
+
+
+    #stats{
+        .row{
+            #workout{
+                background-color: #1e1e21;
+                border-radius: 20px;
+                #statsWorkout{
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
