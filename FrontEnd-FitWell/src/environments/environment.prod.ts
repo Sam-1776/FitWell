@@ -3,6 +3,7 @@ export const environment = {
   apiUrl: 'http://localhost:4201',
   authUrl: 'http://localhost:4201/auth',
   userUrl: 'http://localhost:4201/users/profile',
+  usersUrl: 'http://localhost:4201/users',
   exerciseUrl: 'http://localhost:4201/exercise',
   setUrl: 'http://localhost:4201/set',
   workoutUrl: 'http://localhost:4201/workout',

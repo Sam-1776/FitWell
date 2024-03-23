@@ -31,10 +31,11 @@ public class CardWorkout {
     @JoinColumn(name = "coach_id")
     private User coach;
 
-    public CardWorkout(String name, List<Workout> workouts, int restTimer, User user) {
+    public CardWorkout(String name, List<Workout> workouts, int restTimer, User user, User coach) {
         this.name = name;
         this.workouts = workouts;
         this.restTimer = restTimer;
         this.user = user;
+        this.coach = coach;
     }
 }

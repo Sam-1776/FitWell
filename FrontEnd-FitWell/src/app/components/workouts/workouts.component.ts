@@ -58,9 +58,12 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       user_id: [null],
       coach_id: [null]
     })
-
-    this.getCardWorkout();
     this.getUser();
+    if (this.user?.role.includes('COACH')) {
+      this.getCardCoach();
+    }else{
+      this.getCardWorkout();
+    }
   }
 
   addPanel() {
@@ -72,6 +75,13 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       this.cardWorkout = el;
       console.log(this.cardWorkout);
     });
+  }
+
+  getCardCoach(){
+    this.cardSrv.getCardCoach().subscribe((el: CardWorkout[]) =>{
+      this.cardWorkout = el;
+      console.log(this.cardWorkout);
+    })
   }
 
   generate() {
@@ -102,10 +112,6 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       workouts_id: this.workoutsId,
       restTimer: this.AddCardForm.controls['restTimer'].value,
     };
-    
-    /* if (this.user?.role.includes('COACH')) {
-      data['setId'] = this.setId;
-    } */
 
     console.log(data);
     try{

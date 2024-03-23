@@ -62,12 +62,13 @@
         type="button"
         class="btn btn-outline-light"
         (click)="addSet()"
+        *ngIf="id"
       >
         Add Set
       </button>
     </div>
     <button type="submit" class="btn btn-success" *ngIf="!id || cardByParent.workouts[cardByParent.workouts.length - 1].id == '0' && cardByParent.workouts.length - 1 === index">Confirm</button>
-    <button type="button" class="btn btn-info" (click)="modWorkout()">Mod workout</button>
+    <button type="button" class="btn btn-info" (click)="modWorkout()" *ngIf="id">Mod workout</button>
   </form>
 </div>
 

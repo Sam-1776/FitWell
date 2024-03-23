@@ -52,6 +52,7 @@ public class CardWorkoutService {
         if (current.getRole().size() == 1){
             return cardWorkoutDAO.findByUser(current);
         }else if (current.getRole().get(1).equals(Role.COACH)){
+            System.out.println("ciao");
             return cardWorkoutDAO.findByCoach(current);
         }
             throw new BadRequestException("Invalid Role");
@@ -66,6 +67,7 @@ public class CardWorkoutService {
         if (currentUser.getRole().size() == 1){
             return createCard(cardWorkout,workoutList,currentUser,null);
         }else if (currentUser.getRole().get(1).equals(Role.COACH)){
+            System.out.println("ciao di nuovo");
             User user = userService.findById(UUID.fromString(cardWorkout.user_id()));
             return  createCard(cardWorkout,workoutList,user,currentUser);
         }
@@ -79,11 +81,12 @@ public class CardWorkoutService {
 
 
     public CardWorkout createCard(CardWorkoutDTO cardWorkout, List<Workout> workoutList, User user ,User coach){
+        CardWorkout newCard;
 
-        CardWorkout newCard = cardWorkoutDAO.save(new CardWorkout(cardWorkout.name(), workoutList, cardWorkout.restTimer(), user));
         if (coach != null){
-            newCard.setCoach(coach);
-            cardWorkoutDAO.save(newCard);
+             newCard = cardWorkoutDAO.save(new CardWorkout(cardWorkout.name(), workoutList, cardWorkout.restTimer(), user, coach));
+        }else {
+             newCard = cardWorkoutDAO.save(new CardWorkout(cardWorkout.name(), workoutList, cardWorkout.restTimer(), user, null));
         }
 
         workoutList.forEach(el -> {
@@ -156,7 +159,7 @@ public class CardWorkoutService {
         List<Workout> workoutList = workoutService.generateWorkout(generateCardDTO);
         System.out.println(workoutList);
         User acctualUser = userService.findById(id);
-        CardWorkout newCard = cardWorkoutDAO.save(new CardWorkout(generateCardDTO.name(), workoutList, 60, acctualUser));
+        CardWorkout newCard = cardWorkoutDAO.save(new CardWorkout(generateCardDTO.name(), workoutList, 60, acctualUser, null));
         workoutList.forEach(el -> {
             el.setCardWorkout(newCard);
             workoutDAO.save(el);

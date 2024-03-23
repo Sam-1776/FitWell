@@ -18,6 +18,7 @@ import { DetailsCardComponent } from './components/details-card/details-card.com
 import { DetailsExerciseComponent } from './components/details-exercise/details-exercise.component';
 import { DietComponent } from './components/diet/diet.component';
 import { DietDetailsComponent } from './components/diet-details/diet-details.component';
+import { CardCoachComponent } from './components/card-coach/card-coach.component';
 
 const routes: Route[] = [
   {
@@ -31,6 +32,11 @@ const routes: Route[] = [
   {
     path: 'workout',
     component: WorkoutsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'card',
+    component: CardCoachComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -81,7 +87,8 @@ const routes: Route[] = [
     DetailsCardComponent,
     DetailsExerciseComponent,
     DietComponent,
-    DietDetailsComponent
+    DietDetailsComponent,
+    CardCoachComponent
   ],
   imports: [
     BrowserModule,

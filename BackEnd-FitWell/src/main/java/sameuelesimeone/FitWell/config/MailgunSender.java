@@ -47,7 +47,7 @@ public class MailgunSender {
                 .queryString("from", "FitWell <FitWellSRL@gmail.com>")
                 .queryString("to", coach.getEmail())
                 .queryString("subject", "Create cardWorkout")
-                .queryString("text", "request to create a cardWorkout for " + user.getName() + user.getSurname())
+                .queryString("text", "request to create a cardWorkout for " + user.getName() + user.getSurname() + " UserId:" + user.getId())
                 .asJson();
     }
 
@@ -67,7 +67,7 @@ public class MailgunSender {
                 .queryString("from", "FitWell <FitWellSRL@gmail.com>")
                 .queryString("to", nutritionist.getEmail())
                 .queryString("subject", "Create cardWorkout")
-                .queryString("text", "request to create a Diet for " + user.getName() + user.getSurname())
+                .queryString("text", "request to create a Diet for " + user.getName() + user.getSurname() + " UserId:" + user.getId())
                 .asJson();
     }
 

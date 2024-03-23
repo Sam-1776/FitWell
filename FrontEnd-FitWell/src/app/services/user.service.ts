@@ -9,8 +9,13 @@ import { User } from '../models/user';
 export class UserService {
 
   profileUrl = environment.userUrl;
+  userUrl = environment.usersUrl;
 
   constructor(private http: HttpClient) { }
 
   getProfile(){return this.http.get<User>(this.profileUrl);}
+
+  getUser(id: string){
+    return this.http.get<User>(`${this.userUrl}/${id}`);
+  }
 }

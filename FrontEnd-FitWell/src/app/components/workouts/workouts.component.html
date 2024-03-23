@@ -194,17 +194,7 @@
               formControlName="restTimer"
               min="1"
             />
-          </div>  
-          <div class="mb-3" *ngIf="user?.role?.includes('COACH')">
-            <label for="inputUser" class="form-label">user_id: </label>
-            <input
-              type="text"
-              name="user_id"
-              class="form-control"
-              id="inputUser"
-              formControlName="user_id"
-            />
-          </div>  
+          </div>   
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-light" (click)="addPanel()">Add Exercise</button>
             <button type="submit" class="btn btn-success">Save card</button>

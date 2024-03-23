@@ -16,6 +16,10 @@ export class CardWorkoutService {
     return this.http.get<CardWorkout[]>(this.cardUrl);
   }
 
+  getCardCoach(){
+    return this.http.get<CardWorkout[]>(`${this.cardUrl}/coach`);
+  }
+
   getSingleCard(id: string){
     return this.http.get<CardWorkout>(`${this.cardUrl}/${id}`);
   }
