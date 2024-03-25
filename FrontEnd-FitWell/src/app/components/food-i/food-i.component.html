@@ -1,0 +1,41 @@
+<p>food-i works!</p>
+<div class="container">
+  <form [formGroup]="FoodIForm" (ngSubmit)="saveFoodI()">
+    <div class="mb-3">
+      <label for="inputfoodId" class="form-label">Ingredient:</label>
+      <input
+        type="text"
+        name="inputName"
+        class="form-control"
+        id="inputName"
+        formControlName="inputName"
+        (change)="searchFoodName()"
+      />
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        id="inputfoodId"
+        name="foodId"
+        formControlName="foodId"
+      >
+        <option value="" disabled selected>Search Food name</option>
+        <option [value]="item.id" *ngFor="let item of foodsFound">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="inputamount" class="form-label">Amount: </label>
+      <input
+        type="number"
+        name="amount"
+        class="form-control"
+        id="inputamount"
+        formControlName="amount"
+        min="1"
+      />
+    </div>
+    <button type="submit" class="btn btn-success" *ngIf="!id">Save Ingrediet</button>
+    <button type="button" class="btn btn-info" *ngIf="id">Mod set</button>
+  </form>
+</div>

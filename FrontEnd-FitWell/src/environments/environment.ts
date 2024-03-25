@@ -13,7 +13,9 @@ export const environment = {
   workoutUrl: 'http://localhost:4201/workout',
   cardWorkoutUrl: 'http://localhost:4201/card_workout',
   statsUrl: 'http://localhost:4201/stat',
-  dietUrl: 'http://localhost:4201/diet'
+  dietUrl: 'http://localhost:4201/diet',
+  nutrientUrl: 'http://localhost:4201/nutrients',
+  foodUrl: 'http://localhost:4201/food',
 };
 
 /*

@@ -15,10 +15,12 @@ import sameuelesimeone.FitWell.models.Diet.FoodsIntermediate;
 import sameuelesimeone.FitWell.services.FoodInterService;
 import sameuelesimeone.FitWell.services.FoodService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/food")
+@CrossOrigin(origins = "http://localhost:4200")
 public class FoodController {
 
     @Autowired
@@ -39,6 +41,13 @@ public class FoodController {
     @PreAuthorize("hasAnyAuthority('NUTRITIONIST', 'ADMIN')")
     public Food takeFood(@PathVariable UUID foodId){
         return foodService.findById(foodId);
+    }
+
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyAuthority('NUTRITIONIST', 'ADMIN')")
+    public List<Food> takeFood(@RequestParam String name){
+        return foodService.findByNameContaining(name);
     }
 
     @PostMapping

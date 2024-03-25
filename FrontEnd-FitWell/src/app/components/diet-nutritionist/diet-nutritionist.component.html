@@ -1,0 +1,321 @@
+<div class="conteiner-fluid position-relative" id="page">
+  <div class="row">
+    <div class="col-4" *ngFor="let item of MyDiet">
+      <div class="card" style="width: 18rem">
+        <div class="card-body" (click)="changePage(item.id)">
+          <h5 class="card-title">Diet</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">
+            Total calories: {{ item.totalCalories }}
+          </h6>
+          <ul class="list-group" *ngFor="let recipe of item.recipes">
+            <li class="list-group-item">{{ recipe.name }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#DietGenerate"
+  >
+    Make Diet
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#addFood"
+  >
+    Add Food
+  </button>
+</div>
+
+<div
+  class="modal fade"
+  id="addFood"
+  tabindex="-1"
+  aria-labelledby="addFoodLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content text-bg-dark">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addFoodLabel">Add New Food</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="foodForm" (ngSubmit)="saveFood()">
+          <div class="mb-3">
+            <label for="inputName" class="form-label">Name: </label>
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              id="inputName"
+              formControlName="name"
+            />
+          </div>
+          <div class="accordion" id="Workout" class="mb-3">
+            <div
+              class="accordion-item"
+              *ngFor="let panel of panels; let i = index"
+            >
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#FoodCollapse' + i"
+                  aria-expanded="true"
+                  [attr.aria-controls]="'collapse' + i"
+                >
+                  Nutrient #{{ panel }}
+                </button>
+              </h2>
+              <div
+                [id]="'FoodCollapse' + i"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#Workout"
+              >
+                <div class="accordion-body">
+                  <ng-container>
+                    <app-nutrient></app-nutrient>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label
+              *ngFor="let category of categories"
+              class="form-check-label d-block"
+            >
+              <input
+                type="checkbox"
+                class="form-check-input"
+                name="category"
+                [value]="category.value"
+                (change)="onCheckboxChange($event)"
+              />
+              {{ category.label }}
+            </label>
+          </div>
+
+          <div class="mb-3">
+            <label for="inputcalories" class="form-label">Calories: </label>
+            <input
+              type="number"
+              name="calories"
+              class="form-control"
+              id="inputcalories"
+              formControlName="calories"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-light"
+              (click)="addPanel()"
+            >
+              Add Nutrient
+            </button>
+            <button type="submit" class="btn btn-success">Save card</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="DietGenerate"
+  tabindex="-1"
+  aria-labelledby="DietGenerateLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="DietGenerateLabel">Generate Diet</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="dietForm">
+          <div class="mb-3">
+            <label for="inputnumberMeals" class="form-label">N. Meals: </label>
+            <input
+              type="number"
+              name="numberMeals"
+              class="form-control"
+              id="inputnumberMeals"
+              formControlName="numberMeals"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="inputweight" class="form-label">Weight: </label>
+            <input
+              type="number"
+              name="weight"
+              class="form-control"
+              id="inputweight"
+              formControlName="weight"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="inputage" class="form-label">Age: </label>
+            <input
+              type="number"
+              name="age"
+              class="form-control"
+              id="inputage"
+              formControlName="age"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="inputGender" class="form-label">Gender</label>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              id="inputGender"
+              name="gender"
+              formControlName="gender"
+            >
+              <option value="" disabled selected>
+                Select Biological gender
+              </option>
+              <option value="man">Man</option>
+              <option value="woman">Woman</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="inputwork" class="form-label">Work</label>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              id="inputwork"
+              name="work"
+              formControlName="work"
+            >
+              <option value="" disabled selected>Select work</option>
+              <option *ngFor="let work of works" [value]="work">
+                {{ work }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="inputworkout" class="form-label">Workout:</label>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              id="inputworkout"
+              name="workout"
+              formControlName="workout"
+            >
+              <option value="" disabled selected>Select Hour Workout</option>
+              <option value="up to 2 hours per week">
+                up to 2 hours per week
+              </option>
+              <option value="3 to 5 hours per week">
+                3 to 5 hours per week
+              </option>
+              <option value="more than 5 hours per week">
+                more than 5 hours per week
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="inputtarget" class="form-label">Target:</label>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              id="inputtarget"
+              name="target"
+              formControlName="target"
+            >
+              <option value="" disabled selected>Select target</option>
+              <option value="bulk">bulk</option>
+              <option value="cut">cut</option>
+              <option value="normo">normo</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="user_id" class="form-label">user_id: </label>
+            <input
+              type="text"
+              name="inputUser"
+              class="form-control"
+              id="inputUser"
+              formControlName="inputUser"
+              (change)="searchById()"
+            />
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              id="inputuser_id"
+              name="user_id"
+              formControlName="user_id"
+            >
+              <option value="" disabled selected>Search User</option>
+              <option value="{{ userFound?.id }}">
+                {{ userFound?.email }}
+              </option>
+            </select>
+          </div>
+          <div class="accordion" id="Diet" class="mb-3">
+            <div
+              class="accordion-item"
+              *ngFor="let panel of panelsDiet; let i = index"
+            >
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#FoodCollapse' + i"
+                  aria-expanded="true"
+                  [attr.aria-controls]="'collapse' + i"
+                >
+                  Nutrient #{{ panel }}
+                </button>
+              </h2>
+              <div
+                [id]="'FoodCollapse' + i"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#Diet"
+              >
+                <div class="accordion-body">
+                  <ng-container>
+                    <app-recipe></app-recipe>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-dark"
+              (click)="addPanelD()"
+            >
+              Add Nutrient
+            </button>
+            <button type="submit" class="btn btn-primary">Generate</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

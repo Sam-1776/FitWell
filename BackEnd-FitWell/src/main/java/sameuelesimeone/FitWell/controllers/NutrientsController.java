@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/nutrients")
+@CrossOrigin(origins = "http://localhost:4200")
 public class NutrientsController {
     @Autowired
     NutrientsService nutrientsService;
