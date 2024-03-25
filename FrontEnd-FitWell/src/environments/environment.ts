@@ -16,6 +16,7 @@ export const environment = {
   dietUrl: 'http://localhost:4201/diet',
   nutrientUrl: 'http://localhost:4201/nutrients',
   foodUrl: 'http://localhost:4201/food',
+  recipeUrl: 'http://localhost:4201/recipe',
 };
 
 /*

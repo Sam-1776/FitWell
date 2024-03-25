@@ -5,6 +5,7 @@ import { Diet } from 'src/app/models/diet';
 import { User } from 'src/app/models/user';
 import { DietService } from 'src/app/services/diet.service';
 import { NutrientService } from 'src/app/services/nutrient.service';
+import { RecipeService } from 'src/app/services/recipe.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -49,17 +50,25 @@ export class DietNutritionistComponent implements OnInit, DoCheck {
     'Transport operators',
   ];
 
+  recipeId: string[] = [];
+
   constructor(
     private dietSrv: DietService,
     private router: Router,
     private nutrientSrv: NutrientService,
     private fb: FormBuilder,
-    private userSrv: UserService
+    private userSrv: UserService,
+    private recipeSrv: RecipeService
   ) {}
   ngDoCheck(): void {
     this.nutrientSrv.nutrientId.forEach((el) => {
       if (!this.nutrientList.includes(el)) {
         this.nutrientList.push(el);
+      }
+    });
+    this.recipeSrv.RecipeId.forEach((el) => {
+      if (!this.recipeId.includes(el)) {
+        this.recipeId.push(el);
       }
     });
   }
@@ -100,6 +109,7 @@ export class DietNutritionistComponent implements OnInit, DoCheck {
   }
   addPanelD() {
     this.panelsDiet.push(this.panelsDiet.length + 1);
+    this.dietSrv.foodIterID = []
   }
 
   saveFood(){
@@ -142,5 +152,26 @@ export class DietNutritionistComponent implements OnInit, DoCheck {
      this.userSrv.getUser(id).subscribe((el: User) => {
       this.userFound = el;
     }); 
+  }
+
+  saveDiet(){
+    const data = {
+      numberMeals: this.dietForm.controls['numberMeals'].value,
+      weight: this.dietForm.controls['weight'].value,
+      gender: this.dietForm.controls['gender'].value,
+      age: this.dietForm.controls['age'].value,
+      work: this.dietForm.controls['work'].value,
+      workout: this.dietForm.controls['workout'].value,
+      target: this.dietForm.controls['target'].value,
+      user_id: this.dietForm.controls['user_id'].value,
+      recipe_id: this.recipeId,
+    };
+    try{
+      this.dietSrv.saveDiet(data).subscribe(el =>{
+        console.log(el);
+      })
+    }catch(err){
+      console.log(err);
+    }
   }
 }

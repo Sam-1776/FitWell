@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Diet } from '../models/diet';
 import { Food } from '../models/food';
+import { FoodsIntermediate } from '../models/foods-intermediate';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +32,20 @@ export class DietService {
     return this.http.post<Diet>(`${this.dietUrl}/generate`, data);
   }
 
+  saveDiet(data:{
+    numberMeals: number,
+    weight: number,
+    gender: string,
+    age: number,
+    work: string,
+    workout?: string,
+    target: string,
+    user_id: string,
+    recipe_id: string[]
+  }){
+    return this.http.post<Diet>(this.dietUrl, data);
+  }
+
   getAllDiet(){
     return this.http.get<Diet[]>(this.dietUrl);
   }
@@ -54,6 +70,17 @@ export class DietService {
   searchFood(name: string){
     const params = new HttpParams().set('name', name); // Imposta il parametro di query 'str'
     return this.http.get<Food[]>(`${this.foodUrl}/search`, { params });
+  }
+
+  saveFoodInter(data:{
+    food_id: string,
+    amount: number
+  }){
+    return this.http.post<FoodsIntermediate>(`${this.foodUrl}/foodsInter`, data).pipe(
+      tap(el =>{
+        this.foodIterID.push(el.id);
+      })
+    );
   }
 
 

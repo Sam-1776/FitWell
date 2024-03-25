@@ -31,7 +31,19 @@ export class FoodIComponent implements OnInit {
   
 
   saveFoodI(){
-
+    const data = {
+      food_id: this.FoodIForm.controls['foodId'].value,
+      amount: this.FoodIForm.controls['amount'].value
+    }
+    console.log(data);
+    try{
+      this.foodSrv.saveFoodInter(data).subscribe(el =>{
+        console.log(el);
+        
+      })
+    }catch(err){
+      console.log(err);
+    }
   }
 
 }

@@ -19,6 +19,7 @@ import sameuelesimeone.FitWell.models.Diet.Nutrients;
 import sameuelesimeone.FitWell.models.Diet.RecipeType;
 import sameuelesimeone.FitWell.services.AutoDietService;
 import sameuelesimeone.FitWell.services.AutomaticRecipeService;
+import sameuelesimeone.FitWell.services.DietService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class DBDietRunner implements CommandLineRunner {
 
     @Autowired
     AutomaticRecipeDAO automaticRecipeDAO;
+
+    @Autowired
+    DietService dietService;
 
     @Autowired
     AutomaticRecipeService automaticRecipeService;
@@ -55,8 +59,9 @@ public class DBDietRunner implements CommandLineRunner {
                 takeAllRecipe(recipe);
             }
         }
-        AutoDietDTO autoDietDTO = new AutoDietDTO(5,74,"man", 25, "student", null, "bulk", null, null);
-        System.out.println(autoDietService.RMR(autoDietDTO));
+        AutoDietDTO autoDietDTO = new AutoDietDTO(3,70,"man", 23, "student", null, "normo", null, null);
+        System.out.println(autoDietService.generatekCalDaily(autoDietDTO));
+        System.out.println(dietService.Macro(70, "normo", 2467));
     }
 
     public void takeAllRecipe(String type) throws IOException {
