@@ -102,7 +102,9 @@ public class NutrientsService {
                 }
             }
         }
-        if (amountC == car && amountF == fatty && amountP == pro){
+        if ((amountC >= car - 30 && amountC <= car + 30) &&
+                (amountF >= fatty - 30 && amountF <= fatty + 30) &&
+                (amountP >= pro - 30 && amountP <= pro + 30)){
             Nutrients carboSave = nutrientsDAO.save(carbo);
             Nutrients proteinSave = nutrientsDAO.save(protein);
             Nutrients fatSave = nutrientsDAO.save(fat);
@@ -112,6 +114,12 @@ public class NutrientsService {
             nutrientsList.add(fatSave);
             return nutrientsList;
         }else {
+            System.out.println(amountC);
+            System.out.println(amountF);
+            System.out.println(amountP);
+            System.out.println(car);
+            System.out.println(fatty);
+            System.out.println(pro);
             throw new BadRequestException("Macros do not match, please try again");
         }
 
@@ -137,7 +145,9 @@ public class NutrientsService {
                 }
             }
         }
-        if (amountC == car && amountF == fatty && amountP == pro){
+        if ((amountC >= car - 30 && amountC <= car + 30) &&
+                (amountF >= fatty - 30 && amountF <= fatty + 30) &&
+                (amountP >= pro - 30 && amountP <= pro + 30)){
             for (Nutrients nutrient : nutrients) {
                 switch (nutrient.getName()){
                     case "carbohydrate":
