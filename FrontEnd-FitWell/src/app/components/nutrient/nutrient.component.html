@@ -1,0 +1,32 @@
+<div class="container">
+  <form [formGroup]="newNutrient" (ngSubmit)="saveNutrient()">
+    <div class="mb-3">
+      <label for="inputname" class="form-label">name</label>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        id="inputname"
+        name="name"
+        formControlName="name"
+      >
+        <option value="" disabled selected>Select Nutrient name</option>
+        <option value="carbohydrate">Carbohydrate</option>
+        <option value="protein">Protein</option>
+        <option value="fat">Fat</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="inputamount" class="form-label">Amount: </label>
+      <input
+        type="number"
+        name="amount"
+        class="form-control"
+        id="inputamount"
+        formControlName="amount"
+        min="1"
+      />
+    </div>
+    <button type="submit" class="btn btn-success" *ngIf="!id">Save set</button>
+    <button type="button" class="btn btn-info" *ngIf="id">Mod set</button>
+  </form>
+</div>

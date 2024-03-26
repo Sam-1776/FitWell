@@ -47,6 +47,8 @@ public class FoodService {
         List<Nutrients> nutrients = food.nutrients_id().stream().map(el -> nutrientsService.findById(UUID.fromString(el))).toList();
         List<Category> categories = setCategory(food.category());
         newFood.setName(food.name());
+        newFood.setAmount(100.00);
+        newFood.setUnit("g");
         newFood.setNutrition(nutrients);
         newFood.setCategories(categories);
         newFood.setCalories(food.calories());
@@ -100,5 +102,8 @@ public class FoodService {
         return foodCategory;
     }
 
+    public List<Food> findByNameContaining(String name){
+        return foodDAO.findByNameContaining(name);
+    }
 
 }

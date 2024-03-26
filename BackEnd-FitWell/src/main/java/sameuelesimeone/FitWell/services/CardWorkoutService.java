@@ -49,7 +49,7 @@ public class CardWorkoutService {
     MailgunSender mailgunSender;
 
     public List<CardWorkout> getAllCard(User current){
-        if (current.getRole().size() == 1){
+        if (current.getRole().size() == 1 || current.getRole().get(1).equals(Role.NUTRITIONIST)){
             return cardWorkoutDAO.findByUser(current);
         }else if (current.getRole().get(1).equals(Role.COACH)){
             System.out.println("ciao");

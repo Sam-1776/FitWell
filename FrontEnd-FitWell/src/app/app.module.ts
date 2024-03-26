@@ -19,6 +19,10 @@ import { DetailsExerciseComponent } from './components/details-exercise/details-
 import { DietComponent } from './components/diet/diet.component';
 import { DietDetailsComponent } from './components/diet-details/diet-details.component';
 import { CardCoachComponent } from './components/card-coach/card-coach.component';
+import { DietNutritionistComponent } from './components/diet-nutritionist/diet-nutritionist.component';
+import { NutrientComponent } from './components/nutrient/nutrient.component';
+import { RecipeComponent } from './components/recipe/recipe.component';
+import { FoodIComponent } from './components/food-i/food-i.component';
 
 const routes: Route[] = [
   {
@@ -42,6 +46,11 @@ const routes: Route[] = [
   {
     path: 'diet',
     component: DietComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'card-diet',
+    component: DietNutritionistComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -88,7 +97,11 @@ const routes: Route[] = [
     DetailsExerciseComponent,
     DietComponent,
     DietDetailsComponent,
-    CardCoachComponent
+    CardCoachComponent,
+    DietNutritionistComponent,
+    NutrientComponent,
+    RecipeComponent,
+    FoodIComponent
   ],
   imports: [
     BrowserModule,
