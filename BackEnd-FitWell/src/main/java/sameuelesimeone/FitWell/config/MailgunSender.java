@@ -66,7 +66,7 @@ public class MailgunSender {
                 .basicAuth("api", mailGunAPIKey)
                 .queryString("from", "FitWell <FitWellSRL@gmail.com>")
                 .queryString("to", nutritionist.getEmail())
-                .queryString("subject", "Create cardWorkout")
+                .queryString("subject", "Create Diet")
                 .queryString("text", "request to create a Diet for " + user.getName() + user.getSurname() + " UserId:" + user.getId())
                 .asJson();
     }

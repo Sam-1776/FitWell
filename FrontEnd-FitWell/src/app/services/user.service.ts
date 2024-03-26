@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user';
@@ -10,6 +10,7 @@ export class UserService {
 
   profileUrl = environment.userUrl;
   userUrl = environment.usersUrl;
+  
 
   constructor(private http: HttpClient) { }
 
@@ -17,5 +18,8 @@ export class UserService {
 
   getUser(id: string){
     return this.http.get<User>(`${this.userUrl}/${id}`);
+  }
+  getAllUser(){
+    return this.http.get<User[]>(this.userUrl)
   }
 }

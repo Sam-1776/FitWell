@@ -174,7 +174,10 @@ public class CardWorkoutService {
 
     public void requestOnCard(User user, MailRequestCoachDTO mail){
         User coach = userService.findById(UUID.fromString(mail.coachId()));
-        CardWorkout card = this.findById(UUID.fromString(mail.cardId()));
+        CardWorkout card = null;
+        if(mail.cardId() != null){
+            card = this.findById(UUID.fromString(mail.cardId()));
+        }
         switch (mail.function().toLowerCase()){
             case "create":
                 mailgunSender.sendRequestCreateCard(user, coach);

@@ -1,8 +1,8 @@
-import { StatsD } from "./stats-d";
+import { StatsD } from './stats-d';
 
 export interface NotebookD {
-    id: string;
-    stats: StatsD[];
-    weight: number;
-    rmr: number;
+  id: string;
+  stats: StatsD[];
+  weight: number;
+  rmr: number;
 }

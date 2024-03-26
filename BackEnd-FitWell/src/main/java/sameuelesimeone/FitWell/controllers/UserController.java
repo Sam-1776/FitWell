@@ -12,6 +12,7 @@ import sameuelesimeone.FitWell.models.User;
 import sameuelesimeone.FitWell.services.UserService;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,11 +23,9 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'COACH')")
-    public Page<User> getAll(@RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "10") int size,
-                             @RequestParam(defaultValue = "id") String order) {
-        return this.userService.getUsers(page, size, order);
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN', 'COACH')")
+    public List<User> getAll() {
+        return this.userService.getUsers();
     }
 
     @GetMapping("/profile")

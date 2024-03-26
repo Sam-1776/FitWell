@@ -76,6 +76,19 @@
                   <span class="title-nav"> Diets list</span>
                 </a>
               </li>
+              <li
+              class="nav-item d-flex justify-content-center justify-content-md-start"
+              *ngIf="user"
+            >
+              <a
+                class="nav-link"
+                [routerLink]="['/request']"
+                routerLinkActive="active"
+              >
+              <i class="far fa-plus-square"></i>
+                <span class="title-nav"> Request</span>
+              </a>
+            </li>
               <li class="nav-item" *ngIf="!user">
                 <a
                   class="nav-link"
@@ -98,19 +111,6 @@
               </li>
             </div>
             <div>
-              <li
-                class="nav-item d-flex justify-content-center justify-content-md-start"
-                *ngIf="user"
-              >
-                <a
-                  class="nav-link"
-                  [routerLink]="['/assistenza']"
-                  routerLinkActive="active"
-                >
-                  <i class="bi bi-question-circle"></i>
-                  <span class="title-nav"> Segnalazioni</span>
-                </a>
-              </li>
               <li class="nav-item" *ngIf="user">
                 <button class="btn text-dark m-0 p-2" (click)="logout()">
                   <i
