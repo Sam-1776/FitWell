@@ -1,5 +1,6 @@
 package sameuelesimeone.FitWell.models.NoteBook;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class StatD {
     private UUID id;
     @ManyToOne
     @JoinColumn(name = "diet_id")
+    @JsonIgnore
     private Diet diet;
     private LocalDate date;
     private double weight;

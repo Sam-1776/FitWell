@@ -20,7 +20,7 @@ public class NoteBookD {
     @Id
     @GeneratedValue
     private UUID id;
-    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "stat_id")
     private List<StatD> stats;
     private int RMR;

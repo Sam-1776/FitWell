@@ -36,6 +36,9 @@ public class NoteBookWService {
         if (user.getNoteBookW().getId().equals(found.getId())){
             StatW newStat = statWService.create(statWDTO);
             List<StatW> stats = new ArrayList<>();
+            if (!found.getStats().isEmpty()){
+                stats.addAll(found.getStats());
+            }
             stats.add(newStat);
             found.setStats(stats);
             return noteBookWDAO.save(found);

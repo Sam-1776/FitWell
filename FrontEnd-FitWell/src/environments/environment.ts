@@ -17,6 +17,7 @@ export const environment = {
   nutrientUrl: 'http://localhost:4201/nutrients',
   foodUrl: 'http://localhost:4201/food',
   recipeUrl: 'http://localhost:4201/recipe',
+  noteBookseUrl: 'http://localhost:4201/noteBook',
 };
 
 /*

@@ -32,9 +32,12 @@ public class NoteBookDService {
 
     public NoteBookD modNote(UUID id, User user, StatDDTO statDDTO){
         NoteBookD found = this.findById(id);
-        if (user.getNoteBookW().getId().equals(found.getId())){
+        if (user.getNoteBookD().getId().equals(found.getId())){
             StatD newStat = statDService.create(statDDTO);
             List<StatD> stats = new ArrayList<>();
+            if (!found.getStats().isEmpty()){
+                stats.addAll(found.getStats());
+            }
             stats.add(newStat);
             found.setStats(stats);
             found.setRMR(newStat.getDiet().getRMR());

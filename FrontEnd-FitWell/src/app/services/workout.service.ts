@@ -10,6 +10,7 @@ import { tap } from 'rxjs';
 export class WorkoutService {
   workoutUrl = environment.workoutUrl;
   workoutId: string[] = [];
+  cardWorkoutId: string = '';
 
   constructor(private http: HttpClient) { }
 

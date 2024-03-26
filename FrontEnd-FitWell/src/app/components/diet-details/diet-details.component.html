@@ -1,7 +1,59 @@
 <div class="conteiner-fluid position-relative" id="page">
-    <div class="row m-0">
-        <ul class="list-group">
-            <li class="list-group-item" *ngFor="let item of ingredients">{{item.name}}</li>
-          </ul>
+  <div class="row m-0">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let item of ingredients">
+        {{ item.name }}
+      </li>
+    </ul>
+  </div>
+  <button
+    type="button"
+    class="btn btn-outline-info"
+    data-bs-toggle="modal"
+    data-bs-target="#updateDiet"
+  >
+    Save Update
+  </button>
+</div>
+
+
+<div
+  class="modal fade"
+  id="updateDiet"
+  tabindex="-1"
+  aria-labelledby="updateDietlabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content text-bg-dark">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="updateDietlabel">
+          Mod Card Workout
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="Update" (ngSubmit)="saveUpdateDiet()">
+          <div class="mb-3">
+            <label for="inputWeight" class="form-label">Weight: </label>
+            <input
+              type="number"
+              name="weight"
+              class="form-control"
+              id="inputWeight"
+              formControlName="weight"
+            />
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Save Update</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>

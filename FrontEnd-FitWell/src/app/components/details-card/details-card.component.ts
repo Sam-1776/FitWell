@@ -3,7 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import { CardWorkout } from 'src/app/models/card-workout';
+import { User } from 'src/app/models/user';
 import { CardWorkoutService } from 'src/app/services/card-workout.service';
+import { NotebookService } from 'src/app/services/notebook.service';
+import { UserService } from 'src/app/services/user.service';
 import { WorkoutService } from 'src/app/services/workout.service';
 
 @Component({
@@ -17,13 +20,17 @@ export class DetailsCardComponent implements OnInit, DoCheck {
   card!: CardWorkout;
   exercisesName: string[] = [];
   workoutsId: string[] = [];
+  user!: User;
+
 
   constructor(
     private route: ActivatedRoute,
     private cardSrv: CardWorkoutService,
     private router: Router,
     private fb: FormBuilder,
-    private workoutSrv: WorkoutService
+    private workoutSrv: WorkoutService,
+    private userSrv: UserService,
+    private noteBookSrv: NotebookService
   ) {}
 
 
@@ -36,6 +43,7 @@ export class DetailsCardComponent implements OnInit, DoCheck {
   }
 
   ngOnInit(): void {
+    this.getUser();
     this.takeId();
     console.log(this.id);
     this.takeCard();
@@ -54,6 +62,14 @@ export class DetailsCardComponent implements OnInit, DoCheck {
     });
   }
 
+  getUser() {
+    this.userSrv.getProfile().subscribe((utente: User) => {
+      this.user = utente;
+      console.log(this.user);
+    });
+  }
+
+
   takeCard() {
     this.cardSrv.getSingleCard(this.id).subscribe((el: CardWorkout) => {
       this.card = el;
@@ -66,6 +82,7 @@ export class DetailsCardComponent implements OnInit, DoCheck {
 
   exerciseDetails(id: string) {
     this.router.navigate(['/exDetails/', id]);
+    this.workoutSrv.cardWorkoutId = this.card.id;
   }
 
   setValueForm(){
@@ -101,6 +118,21 @@ export class DetailsCardComponent implements OnInit, DoCheck {
         this.workoutSrv.workoutId = [];
       this.workoutsId = [];
       });
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+  saveWorkout(){
+    const data = {
+      cardWorkoutId: this.id
+    }
+    console.log(data);
+    console.log(this.user);
+    try{
+      this.noteBookSrv.saveStatsOnNotebookW(this.user.noteBookW.id, data).subscribe(el => {
+        console.log(el);
+      })
     }catch(err){
       console.log(err);
     }
