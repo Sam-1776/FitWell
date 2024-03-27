@@ -7,6 +7,9 @@
           <h6 class="card-subtitle mb-2 text-body-secondary">
             <i class="bi bi-stopwatch"></i> {{ item.restTimer }}
           </h6>
+          <h6 class="card-subtitle mb-2 text-body-secondary" *ngIf="item.coach">
+            {{ item.coach.name }} {{item.coach.surname}}
+          </h6>
           <ul class="list-group" *ngFor="let workout of item.workouts">
             <li class="list-group-item">{{ workout.exercise.name }}</li>
           </ul>
