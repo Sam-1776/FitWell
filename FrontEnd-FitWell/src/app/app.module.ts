@@ -101,7 +101,7 @@ const routes: Route[] = [
     DietNutritionistComponent,
     NutrientComponent,
     RecipeComponent,
-    FoodIComponent
+    FoodIComponent,
   ],
   imports: [
     BrowserModule,

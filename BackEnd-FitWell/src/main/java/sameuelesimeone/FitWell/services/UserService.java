@@ -30,10 +30,8 @@ public class UserService {
     MailgunSender mailgunSender;
 
 
-    public Page<User> getUsers(int pageN, int pageS, String OrderBy) {
-        if (pageS > 20) pageS = 20;
-        Pageable pageable = PageRequest.of(pageN, pageS, Sort.by(OrderBy));
-        return userDAO.findAll(pageable);
+    public List<User> getUsers() {
+        return userDAO.findAll();
     }
 
     public User findById(UUID id) {
@@ -84,4 +82,6 @@ public class UserService {
         }
         return found;
     }
+
+
 }

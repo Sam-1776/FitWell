@@ -6,8 +6,11 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { CardWorkout } from 'src/app/models/card-workout';
 import { Exercise } from 'src/app/models/exercise';
 import { PageExercise } from 'src/app/models/page-exercise';
+import { User } from 'src/app/models/user';
 import { CardWorkoutService } from 'src/app/services/card-workout.service';
 import { ExerciseService } from 'src/app/services/exercise.service';
+import { RequestService } from 'src/app/services/request.service';
+import { UserService } from 'src/app/services/user.service';
 import { WorkoutService } from 'src/app/services/workout.service';
 
 @Component({
@@ -27,12 +30,19 @@ export class WorkoutsComponent implements OnInit, DoCheck {
 
   panels: number[] = [];
 
+  userFoundCoach: User[] = [];
+  coach: string = 'COACH';
+
+  RequestCard!: FormGroup
+
   constructor(
     private cardSrv: CardWorkoutService,
     private fb: FormBuilder,
     private router: Router,
     private workoutSrv: WorkoutService,
-    private authSrv: AuthService
+    private authSrv: AuthService,
+    private userSrv: UserService,
+    private requestSrv: RequestService
   ) {}
   ngDoCheck(): void {
     this.muscle = this.generateCard.controls['partMuscle'].value;
@@ -58,16 +68,31 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       user_id: [null],
       coach_id: [null]
     })
+    this.RequestCard = this.fb.group({
+      coachId: [null],
+      function: [null]
+    })
     this.getUser();
     if (this.user?.role.includes('COACH')) {
       this.getCardCoach();
     }else{
       this.getCardWorkout();
     }
+    this.takeCoach()
   }
 
   addPanel() {
     this.panels.push(this.panels.length + 1);
+  }
+  takeCoach(){
+    this.userSrv.getAllUser().subscribe(el =>{
+      el.forEach(userF => {
+        if(userF.role.includes('COACH')){
+          this.userFoundCoach.push(userF);
+        }
+      })
+      console.log(el);
+    })
   }
 
   getCardWorkout() {
@@ -127,6 +152,18 @@ export class WorkoutsComponent implements OnInit, DoCheck {
 
   changePage(id: string){
     this.router.navigate(['/details/',id]);
+  }
+
+  sandRequest(){
+    const data = {
+      coachId: this.RequestCard.controls['coachId'].value,
+      function: this.RequestCard.controls['function'].value
+    }
+    try{
+      this.requestSrv.sendRequestCreateCard(data).subscribe()
+    }catch(err){
+      console.log(err);
+    }
   }
 
 

@@ -28,6 +28,14 @@
       type="button"
       class="btn btn-success ms-2"
       data-bs-toggle="modal"
+      data-bs-target="#RequestCard"
+    >
+      Request Card
+    </button>
+    <button
+      type="button"
+      class="btn btn-success ms-2"
+      data-bs-toggle="modal"
       data-bs-target="#addCardWorkout"
     >
       Add
@@ -205,3 +213,70 @@
     </div>
   </div>
 </div>
+
+
+<div
+class="modal fade"
+id="RequestCard"
+tabindex="-1"
+aria-labelledby="RequestCardLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content text-bg-dark">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="RequestCardLabel">Request Create Card</h1>
+      <button
+        type="button"
+        class="btn-close text-light"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="RequestCard" (ngSubmit)="sandRequest()">
+        <div class="mb-3">
+          <label for="function" class="form-label">Function: </label>
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            id="function"
+            name="function"
+            formControlName="function"
+          >
+            <option value="" disabled selected>Select Function</option>
+            <option value="create">
+              Create
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="coachId" class="form-label">Coach: </label>
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            id="inputcoachId"
+            name="coachId"
+            formControlName="coachId"
+          >
+            <option value="" disabled selected>Search User</option>
+            <option value="{{ user.id }}" *ngFor="let user of userFoundCoach">
+              {{ user.name }} {{ user.surname }}
+            </option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-success"
+          data-bs-dismiss="modal"
+        >
+          Confirm
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+
+

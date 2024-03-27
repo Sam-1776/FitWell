@@ -198,10 +198,13 @@ public class DietService {
 
     public void requestOnDiet(User user, MailRequestNutritionistDTO mail){
         User nutritionist = userService.findById(UUID.fromString(mail.nutritionist_id()));
-        Diet diet = this.findById(UUID.fromString(mail.diet_id()));
+        Diet diet = null;
+        if(mail.diet_id() != null){
+            diet = this.findById(UUID.fromString(mail.diet_id()));
+        }
         switch (mail.function().toLowerCase()){
             case "create":
-                mailgunSender.sendRequestCreateDiet(user, nutritionist);
+                mailgunSender.sendRequestCreateDiet(user, nutritionist, mail);
                 break;
             case "modify", "delete":
                 mailgunSender.sendrequestOnDiet(user, nutritionist, diet, mail.function());

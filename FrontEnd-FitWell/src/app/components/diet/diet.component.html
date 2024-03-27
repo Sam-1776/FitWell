@@ -18,8 +18,133 @@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#DietGenerate">
     Generate Diet
   </button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#DietRequest">
+    Request Diet
+  </button>
   
   <!-- Modal -->
+  <div class="modal fade" id="DietRequest" tabindex="-1" aria-labelledby="DietRequestLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="DietRequestLabel">Generate Diet</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="RequestDietForm" (ngSubmit)="sendRequest()">
+              <div class="mb-3">
+                <label for="inputnumberMeals" class="form-label">N. Meals: </label>
+                <input
+                  type="number"
+                  name="numberMeals"
+                  class="form-control"
+                  id="inputnumberMeals"
+                  formControlName="numberMeals"
+                />
+              </div>
+                <div class="mb-3">
+                    <label for="inputweight" class="form-label">Weight: </label>
+                    <input
+                      type="number"
+                      name="weight"
+                      class="form-control"
+                      id="inputweight"
+                      formControlName="weight"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputage" class="form-label">Age: </label>
+                    <input
+                      type="number"
+                      name="age"
+                      class="form-control"
+                      id="inputage"
+                      formControlName="age"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputwork" class="form-label">Work</label>
+                      <select
+                        class="form-select"
+                        aria-label="Default select example"
+                        id="inputwork"
+                        name="work"
+                        formControlName="work"
+                      >
+                        <option value="" disabled selected>Select work</option>
+                        <option *ngFor="let work of works" [value]="work">{{work}}</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputworkout" class="form-label">Workout:</label>
+                      <select
+                        class="form-select"
+                        aria-label="Default select example"
+                        id="inputworkout"
+                        name="workout"
+                        formControlName="workout"
+                      >
+                        <option value="" disabled selected>Select Hour Workout</option>
+                        <option value="up to 2 hours per week">up to 2 hours per week</option>
+                        <option value="3 to 5 hours per week">3 to 5 hours per week</option>
+                        <option value="more than 5 hours per week">more than 5 hours per week</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputtarget" class="form-label">Target:</label>
+                      <select
+                        class="form-select"
+                        aria-label="Default select example"
+                        id="inputtarget"
+                        name="target"
+                        formControlName="target"
+                      >
+                        <option value="" disabled selected>Select target</option>
+                        <option value="bulk">bulk</option>
+                        <option value="cut">cut</option>
+                        <option value="normo">normo</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="function" class="form-label">Function: </label>
+                    <select
+                      class="form-select"
+                      aria-label="Default select example"
+                      id="function"
+                      name="function"
+                      formControlName="function"
+                    >
+                      <option value="" disabled selected>Select Function</option>
+                      <option value="create">
+                        Create
+                      </option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="nutritionistId" class="form-label">Nutritionist: </label>
+                    <select
+                      class="form-select"
+                      aria-label="Default select example"
+                      id="inputnutritionistId"
+                      name="nutritionistId"
+                      formControlName="nutritionistId"
+                    >
+                      <option value="" disabled selected>Search User</option>
+                      <option value="{{ user.id }}" *ngFor="let user of userFoundnutritionist">
+                        {{ user.name }} {{ user.surname }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Generate</button>
+                  </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="modal fade" id="DietGenerate" tabindex="-1" aria-labelledby="DietGenerateLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
