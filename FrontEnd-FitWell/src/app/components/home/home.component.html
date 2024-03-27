@@ -51,7 +51,7 @@
       <thead>
         <tr>
           <th
-            *ngFor="let day of days"
+            *ngFor="let day of days.slice(0,7)"
             [class.today]="day.isToday"
             [class]="day.borderClass"
           >
@@ -64,7 +64,7 @@
       <tbody>
         <tr>
           <td
-            *ngFor="let day of days"
+            *ngFor="let day of days.slice(0,7)"
             [class.today]="day.isToday"
             [class]="day.borderClass"
           >

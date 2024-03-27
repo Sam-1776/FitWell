@@ -82,78 +82,88 @@ export class HomeComponent implements OnInit {
       this.MyDiet = dietData;
       console.log(this.MyDiet[1].rmr);
 
-      // Dopo aver ottenuto i dati sia del cardWorkout che della dieta, ora puoi chiamare la funzione per generare i giorni della settimana
-      this.days = this.generateWeekDays();
+      this.days = this.generateMonthDays();
       this.today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
     });
   }
 
-  generateWeekDays(): {
+  generateMonthDays(): {
     name: string;
     isToday: boolean;
     borderClass: string;
     workout?: CardWorkout;
     diet: Diet;
-}[] {
-    const weekdays = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday',
-    ];
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  }[] {
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const startingDayOfWeek = firstDayOfMonth.getDay();
+    const daysInMonth = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      0
+    ).getDate();
     const days: {
-        name: string;
-        isToday: boolean;
-        borderClass: string;
-        workout?: CardWorkout;
-        diet: Diet;
+      name: string;
+      isToday: boolean;
+      borderClass: string;
+      workout?: CardWorkout;
+      diet: Diet;
     }[] = [];
+    let dietIndex = 0;
+
+    let daysToMonday = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
+
+    const currentDate = new Date(firstDayOfMonth);
+    currentDate.setDate(firstDayOfMonth.getDate() - daysToMonday);
 
     for (let i = 0; i < 7; i++) {
-        const index = i % 7;
-        const dayName = weekdays[index];
-        const isToday = dayName === today;
-        const borderClass = isToday ? 'today-border' : '';
-        let assignedWorkout = undefined;
+      const dayName = currentDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+      });
+      const isToday =
+        currentDate.getDate() === today.getDate() &&
+        currentDate.getMonth() === today.getMonth();
+      const borderClass = isToday ? 'today-border' : '';
+      let assignedWorkout = undefined;
 
-        switch (this.cardWorkout.length) {
-            case 3:
-                if ([0, 2, 4].includes(index)) {
-                    const workoutIndex = Math.floor(index / 2);
-                    assignedWorkout = this.cardWorkout[workoutIndex];
-                }
-                break;
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                if ([0, 1, 3, 4].includes(index)) {
-                    const workoutIndex = [0, 1, 3, 4].indexOf(index);
-                    assignedWorkout = this.cardWorkout[workoutIndex];
-                }
-                break;
-            // In caso di altre lunghezze di this.cardWorkout, non facciamo nulla
-        }
+      const currentDietIndex = dietIndex % this.MyDiet.length;
+      const currentDiet = this.MyDiet[currentDietIndex];
+      dietIndex++;
 
-        // Aggiungiamo il giorno alla lista
-        days.push({
-            name: dayName,
-            isToday: isToday,
-            borderClass: borderClass,
-            workout: assignedWorkout,
-            diet: this.MyDiet[i],
-        });
+      switch (this.cardWorkout.length) {
+        case 3:
+          if ([0, 2, 4].includes(i)) {
+            const workoutIndex = Math.floor(i / 2);
+            assignedWorkout = this.cardWorkout[workoutIndex];
+          }
+          break;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+          if ([0, 1, 3, 4].includes(i)) {
+            const workoutIndex = [0, 1, 3, 4].indexOf(i);
+            assignedWorkout = this.cardWorkout[workoutIndex];
+          }
+          break;
+      }
+
+      days.push({
+        name: dayName,
+        isToday: isToday,
+        borderClass: borderClass,
+        workout: assignedWorkout,
+        diet: currentDiet,
+      });
+
+      currentDate.setDate(currentDate.getDate() + 1);
     }
 
     return days;
-}
+  }
 
   getStatsD() {
     new Chart('statsDiet', {
