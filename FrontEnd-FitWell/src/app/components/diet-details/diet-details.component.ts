@@ -2,6 +2,7 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Chart } from 'chart.js';
 import { Diet } from 'src/app/models/diet';
 import { FoodsIntermediate } from 'src/app/models/foods-intermediate';
 import { Recipe } from 'src/app/models/recipe';
@@ -18,7 +19,6 @@ import { UserService } from 'src/app/services/user.service';
 export class DietDetailsComponent implements OnInit {
   diet!: Diet;
   recipe!: Recipe[];
-  ingredients!: FoodsIntermediate[];
   id!: string;
   user!: User;
   Update!: FormGroup;
@@ -59,15 +59,8 @@ export class DietDetailsComponent implements OnInit {
     this.dietSrv.getDiet(this.id).subscribe((el) => {
       this.diet = el;
       console.log(this.diet);
-      this.takeIngredients(this.diet);
-    });
-  }
-
-  takeIngredients(diet: Diet) {
-    console.log(diet);
-
-    diet.recipes.forEach((element) => {
-      this.ingredients = element.ingredients;
+      this.recipe = el.recipes
+      this.getMacro()
     });
   }
 
@@ -86,5 +79,34 @@ export class DietDetailsComponent implements OnInit {
     }catch(err){
       console.log(err);
     }
+  }
+
+
+  getMacro() {
+    new Chart('Macro', {
+      type: 'doughnut',
+      data: {
+        labels: this.diet.nutrients.map(el => el.name),
+        datasets: [
+          {
+          label: "",
+          data: this.diet.nutrients.map(el => el.amount),
+          backgroundColor: [
+            'rgb(255, 205, 86)',
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)'
+          ],
+          hoverOffset: 4
+        },
+      ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
   }
 }

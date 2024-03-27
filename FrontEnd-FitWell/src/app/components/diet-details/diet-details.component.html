@@ -1,10 +1,16 @@
 <div class="conteiner-fluid position-relative" id="page">
+  <div id="nutrient">
+    <canvas id="Macro" class="mx-3 mb-3"></canvas>
+  </div>
   <div class="row m-0">
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of ingredients">
-        {{ item.name }}
-      </li>
-    </ul>
+    <div class="card p-0" style="width: 18rem;" *ngFor="let ingredient of recipe">
+      <div class="card-header">
+        {{ingredient.name}}
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let item of ingredient.ingredients">{{item.name}}</li>
+      </ul>
+    </div>
   </div>
   <button
     type="button"
@@ -14,6 +20,7 @@
   >
     Save Update
   </button>
+
 </div>
 
 
