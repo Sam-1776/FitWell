@@ -2,17 +2,19 @@
   <div class="row m-0 p-0">
     <div class="container mt-3 mb-2" id="data">
       <h1 class="ms-3 mt-4">Welcome to Dashboard</h1>
-      <p class="ms-4">Hello {{user.name}} {{user.surname}}, see what do you do today</p>
+      <p class="ms-4" *ngIf="user">
+        Hello {{ user.name }} {{ user.surname }}, see what do you do today
+      </p>
     </div>
-    <div class="container" id="anam">
+    <div class="container" id="anam" *ngIf="user">
       <div class="row">
         <div class="col-4">
           <div id="weight">
             <div class="p-3 d-flex alig align-items-center">
               <i class="fas fa-weight fa-3x"></i>
               <div class="d-flex flex-column ms-3">
-              <h4 class="m-0">Weight</h4>
-              <p class="m-0">{{user.noteBookD.weight}}</p>
+                <h4 class="m-0">Weight</h4>
+                <p class="m-0">{{ user.noteBookD.weight }}</p>
               </div>
             </div>
           </div>
@@ -22,19 +24,19 @@
             <div class="p-3 d-flex alig align-items-center">
               <i class="fas fa-fire fa-3x"></i>
               <div class="d-flex flex-column ms-3">
-              <h4 class="m-0">BMR</h4>
-              <p class="m-0">{{user.noteBookD.rmr}}</p>
+                <h4 class="m-0">BMR</h4>
+                <p class="m-0">{{ user.noteBookD.rmr }}</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-4" *ngIf="cardWorkout">
           <div id="weight">
             <div class="p-3 d-flex alig align-items-center">
               <i class="fas fa-clipboard fa-3x"></i>
               <div class="d-flex flex-column ms-3">
-              <h4 class="m-0">Workouts card</h4>
-              <p class="m-0">{{cardWorkout.length}}</p>
+                <h4 class="m-0">Workouts card</h4>
+                <p class="m-0">{{ cardWorkout.length }}</p>
               </div>
             </div>
           </div>
@@ -43,19 +45,43 @@
     </div>
   </div>
 
-  <div class="container-fluid p-0 mx-0 my-3 text-light" id="calendar">
+  <div class="container-fluid p-0 mx-0 my-3 text-light pb-2" id="calendar">
     <h4 class="m-3 display-6">Calendar</h4>
-    <table class="weekly-calendar">
+    <table class="weekly-calendar mb-3">
       <thead>
         <tr>
-          <th *ngFor="let day of days" [class.today]="day.isToday" [class]="day.borderClass">
-            <span [class]="day.name === today ? 'today-name' : ''">{{ day.name }}</span>
+          <th
+            *ngFor="let day of days"
+            [class.today]="day.isToday"
+            [class]="day.borderClass"
+          >
+            <span [class]="day.name === today ? 'today-name' : ''">{{
+              day.name
+            }}</span>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td *ngFor="let day of days" [class.today]="day.isToday" [class]="day.borderClass"></td>
+          <td
+            *ngFor="let day of days"
+            [class.today]="day.isToday"
+            [class]="day.borderClass"
+          >
+            <ul class="list-group mb-2" (click)="changePageDiet(day.diet.id)">
+              <li
+                class="list-group-item"
+                *ngFor="let recipe of day.diet.recipes"
+              >
+                {{ recipe?.name }}
+              </li>
+            </ul>
+            <ul class="list-group" (click)="changePageWorkout(day.workout?.id)">
+              <li class="list-group-item" *ngIf="day.workout">
+                {{ day.workout.name }}
+              </li>
+            </ul>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -64,21 +90,40 @@
   <div class="container-fluid mx-0 mt-3 pb-4" id="stats">
     <div class="row justify-content-around">
       <div class="col-5" id="workout">
-        <div id="carouselworkout" class="carousel slide" data-bs-ride="carousel">
+        <div
+          id="carouselworkout"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
           <div class="carousel-inner">
-              <div class="carousel-item" *ngFor="let workout of cardWorkout; let i = index" [class.active]="i === 0">
-                  <div>
-                      <canvas [id]="'statsWorkout' + i" class="m-3" #canvas></canvas>
-                  </div>
+            <div
+              class="carousel-item"
+              *ngFor="let workout of cardWorkout; let i = index"
+              [class.active]="i === 0"
+            >
+              <h3 class="text-center text-light">{{ workout.name }}</h3>
+              <div>
+                <canvas [id]="'statsWorkout' + i" class="m-3" #canvas></canvas>
               </div>
+            </div>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselworkout" data-bs-slide="prev">
-              <span class="visually-hidden">Previous</span>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselworkout"
+            data-bs-slide="prev"
+          >
+            <span class="visually-hidden">Previous</span>
           </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselworkout" data-bs-slide="next">
-              <span class="visually-hidden">Next</span>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselworkout"
+            data-bs-slide="next"
+          >
+            <span class="visually-hidden">Next</span>
           </button>
-      </div>
+        </div>
       </div>
       <div class="col-5" id="diet">
         <div>
