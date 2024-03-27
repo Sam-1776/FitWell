@@ -76,19 +76,6 @@
                   <span class="title-nav"> Diets list</span>
                 </a>
               </li>
-              <li
-              class="nav-item d-flex justify-content-center justify-content-md-start"
-              *ngIf="user"
-            >
-              <a
-                class="nav-link"
-                [routerLink]="['/request']"
-                routerLinkActive="active"
-              >
-              <i class="far fa-plus-square"></i>
-                <span class="title-nav"> Request</span>
-              </a>
-            </li>
               <li class="nav-item" *ngIf="!user">
                 <a
                   class="nav-link"

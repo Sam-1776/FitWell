@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class RequestService {
   cardUrl = environment.cardWorkoutUrl
+  dietUrl = environment.dietUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -16,5 +17,19 @@ export class RequestService {
     function: string
   }){
     return this.http.post(`${this.cardUrl}/requestMail`,data)
+  }
+
+  sendRequestDiet(data:{
+     nutritionist_id: string,
+     diet_id?: string,
+     function: string,
+     weight: number,
+     age: number,
+     numberMeals: number,
+     work: string,
+     workout?: string,
+     target: string
+  }){
+    return this.http.post(`${this.dietUrl}/requestMail`,data)
   }
 }

@@ -31,9 +31,7 @@ export class WorkoutsComponent implements OnInit, DoCheck {
   panels: number[] = [];
 
   userFoundCoach: User[] = [];
-  userFoundnutritionist: User[] = [];
   coach: string = 'COACH';
-  nutritionist: string = 'NUTRITIONIST';
 
   RequestCard!: FormGroup
 
@@ -91,8 +89,6 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       el.forEach(userF => {
         if(userF.role.includes('COACH')){
           this.userFoundCoach.push(userF);
-        }else if(userF.role.includes('NUTRITIONIST')){
-          this.userFoundnutritionist.push(userF)
         }
       })
       console.log(el);
