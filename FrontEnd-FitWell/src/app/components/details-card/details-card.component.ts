@@ -21,6 +21,7 @@ export class DetailsCardComponent implements OnInit, DoCheck {
   exercisesName: string[] = [];
   workoutsId: string[] = [];
   user!: User;
+  timerValue: number = 0; 
 
 
   constructor(
@@ -73,6 +74,7 @@ export class DetailsCardComponent implements OnInit, DoCheck {
   takeCard() {
     this.cardSrv.getSingleCard(this.id).subscribe((el: CardWorkout) => {
       this.card = el;
+      this.timerValue = el.restTimer;
       el.workouts.forEach(element =>{
         this.exercisesName.push(element.exercise.name);
       })
@@ -80,8 +82,9 @@ export class DetailsCardComponent implements OnInit, DoCheck {
     });
   }
 
-  exerciseDetails(id: string) {
-    this.router.navigate(['/exDetails/', id]);
+  exerciseDetails(cardId: string, id: string) {
+    console.log(cardId);
+    this.router.navigate(['/exDetails/',cardId, id]);
     this.workoutSrv.cardWorkoutId = this.card.id;
   }
 
@@ -136,5 +139,20 @@ export class DetailsCardComponent implements OnInit, DoCheck {
     }catch(err){
       console.log(err);
     }
+  }
+
+  Timer(initialValue: number) {
+    this.timerValue = initialValue; 
+  
+    const timerInterval = setInterval(() => {
+      console.log(this.timerValue); 
+  
+      if (this.timerValue === 0) {
+        clearInterval(timerInterval); 
+        this.timerValue = this.card.restTimer;
+      } else {
+        this.timerValue--; 
+      }
+    }, 1000); 
   }
 }

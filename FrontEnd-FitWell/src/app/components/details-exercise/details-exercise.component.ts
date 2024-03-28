@@ -1,7 +1,9 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Chart, LineElement } from 'chart.js';
+import { CardWorkout } from 'src/app/models/card-workout';
 import { Workout } from 'src/app/models/workout';
+import { CardWorkoutService } from 'src/app/services/card-workout.service';
 import { StatsWService } from 'src/app/services/stats-w.service';
 import { WorkoutService } from 'src/app/services/workout.service';
 
@@ -16,44 +18,70 @@ export class DetailsExerciseComponent implements OnInit {
   cardID!: string;
   rep: number[] = [];
   weigth: number[] = [];
-  date: Date[] = [];  
+  date: Date[] = [];
+  card!: CardWorkout;
+  timerValue: number = 0; 
 
   constructor(
     private workoutSrv: WorkoutService,
     private route: ActivatedRoute,
-    private statsSrv: StatsWService
+    private statsSrv: StatsWService,
+    private cardSrv: CardWorkoutService,
   ) {}
 
   ngOnInit(): void {
-    this.cardID = this.workoutSrv.cardWorkoutId;
     this.takeId();
-    this.takeWorkout();
-    this.takeStats();
+  }
+
+  takeCard() {
+    this.cardSrv.getSingleCard(this.cardID).subscribe((el: CardWorkout) => {
+      this.card = el;
+      this.timerValue = this.card.restTimer;
+    });
   }
 
   takeId() {
     this.route.params.subscribe((parm) => {
       this.id = parm['id'];
+      this.cardID = parm['cardId'];
+      console.log(this.cardID);
+      this.takeWorkout();
+      this.takeCard();
     });
   }
 
   takeWorkout() {
     this.workoutSrv.getWorkout(this.id).subscribe((el: Workout) => {
       this.workout = el;
+      console.log(el);
+      this.takeStats();
     });
   }
 
   async takeStats() {
     this.statsSrv.getStatsW(this.cardID).subscribe((el) => {
       console.log(el);
+      let avgRep = 0;
+      let avgWei = 0;
 
       for (let i = 0; i < el.length; i++) {
-        this.date.push(el[i].date)
+        this.date.push(el[i].date);
         console.log(this.date);
-        for (let j = 0; j < this.workout.sets.length; j++) {
-          this.rep.push(this.workout.sets[j].rep);
-          this.weigth.push(this.workout.sets[j].weight);
+        let totalRep = 0;
+        let totalWeigth = 0;
+        let totalSets = 0;
+        for (let j = 0; j < this.workout.sets!.length; j++) {
+          totalRep += this.workout.sets[j].rep;
+          totalWeigth += this.workout.sets[j].weight;
+          totalSets++;
         }
+        avgRep = totalRep / totalSets;
+        console.log(totalRep);
+        console.log(totalSets);
+
+        avgWei = totalWeigth / totalSets;
+        this.rep.push(avgRep);
+        this.weigth.push(avgWei);
         console.log(this.rep);
         console.log(this.weigth);
       }
@@ -92,5 +120,20 @@ export class DetailsExerciseComponent implements OnInit {
         },
       },
     });
+  }
+
+  Timer(initialValue: number) {
+    this.timerValue = initialValue; 
+  
+    const timerInterval = setInterval(() => {
+      console.log(this.timerValue); 
+  
+      if (this.timerValue === 0) {
+        clearInterval(timerInterval); 
+        this.timerValue = this.card.restTimer;
+      } else {
+        this.timerValue--; 
+      }
+    }, 1000); 
   }
 }

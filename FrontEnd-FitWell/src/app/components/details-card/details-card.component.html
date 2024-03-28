@@ -1,9 +1,9 @@
 <div class="conteiner-fluid position-relative" id="page">
-  <h2>{{ card.restTimer }}</h2>
+  <h2 (click)="Timer(card.restTimer)">{{timerValue}}</h2>
   <div class="row p-0 m-0">
     <div class="col-4" *ngFor="let item of card.workouts">
       <div class="card" style="width: 18rem">
-        <div class="card-body" (click)="exerciseDetails(item.id)">
+        <div class="card-body" (click)="exerciseDetails(id, item.id)">
           <h5 class="card-title">{{ item.exercise.name }}</h5>
           <ul class="list-group" *ngFor="let set of item.sets">
             <li class="list-group-item">

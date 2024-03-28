@@ -1,7 +1,7 @@
-<p>details-exercise works!</p>
 <div class="conteiner-fluid position-relative" id="page">
-    <ul class="list-group" *ngFor="let set of workout?.sets">
-        <li class="list-group-item">
+  <h2 (click)="Timer(card.restTimer)">{{timerValue}}</h2>
+    <ul class="list-group">
+        <li class="list-group-item"  *ngFor="let set of workout?.sets">
             <div class="d-flex justify-content-between">
                 <p>Rep:{{ set.rep }}</p>
                 <p>Weight:{{set.weight}}</p>
