@@ -11,10 +11,10 @@
       />
     </div>
     <div class="accordion mb-3" id="Ingredient">
-        <div class="accordion-item" *ngFor="let panel of panels; let i = index">
+        <div class="accordion-item text-bg-dark" *ngFor="let panel of panels; let i = index">
           <h2 class="accordion-header">
             <button
-              class="accordion-button"
+              class="accordion-button text-bg-dark"
               type="button"
               data-bs-toggle="collapse"
               [attr.data-bs-target]="'#IngredientCollapse' + i"
@@ -39,7 +39,7 @@
       </div>
       <button
         type="button"
-        class="btn btn-outline-dark"
+        class="btn btn-outline-light"
         (click)="addPanel()"
       >
         Add Ingredient

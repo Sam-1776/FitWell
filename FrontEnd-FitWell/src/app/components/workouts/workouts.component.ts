@@ -118,7 +118,9 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       weight: this.generateCard.controls['weight'].value,
     };
     try {
-      this.cardSrv.generateAutoCard(data).subscribe();
+      this.cardSrv.generateAutoCard(data).subscribe(() =>{
+        this.router.navigate(['/workout']);
+      });
     } catch (err) {
       console.log(err);
     }
@@ -140,7 +142,9 @@ export class WorkoutsComponent implements OnInit, DoCheck {
 
     console.log(data);
     try{
-      this.cardSrv.saveNewCard(data).subscribe();
+      this.cardSrv.saveNewCard(data).subscribe(() =>{
+        this.router.navigate(['/workout']);
+      });
     }catch(err){
       console.log(err);
     }finally{
@@ -160,7 +164,9 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       function: this.RequestCard.controls['function'].value
     }
     try{
-      this.requestSrv.sendRequestCreateCard(data).subscribe()
+      this.requestSrv.sendRequestCreateCard(data).subscribe(() =>{
+        this.router.navigate(['/workout']);
+      })
     }catch(err){
       console.log(err);
     }

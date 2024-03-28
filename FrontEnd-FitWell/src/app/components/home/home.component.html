@@ -108,14 +108,14 @@
     </table>
   </div>
 
-  <div class="container-fluid mx-0 mt-3 pb-4" id="stats">
+  <div class="container-fluid mx-0 mt-3 p-4" id="stats">
     <div class="row justify-content-around">
-      <div class="col-sm-11 col-lg-5" id="workout" *ngIf="cardWorkout && cardWorkout.length === 0">
+      <div class="col-md-11 col-xl-5" id="workout" *ngIf="cardWorkout && cardWorkout.length === 0">
         <div>
           <canvas id="statsNW" class="m-3"></canvas>
         </div>
       </div>
-      <div class="col-sm-11 col-lg-5" id="workout" *ngIf="cardWorkout.length > 0">
+      <div class="col-md-11 col-xl-5" id="workout" *ngIf="cardWorkout.length > 0">
         <div
           id="carouselworkout"
           class="carousel slide"
@@ -151,7 +151,7 @@
           </button>
         </div>
       </div>
-      <div class="col-sm-11 col-lg-5" id="diet">
+      <div class="col-md-11 col-xl-5" id="diet">
         <div>
           <canvas id="statsDiet" class="m-3"></canvas>
         </div>

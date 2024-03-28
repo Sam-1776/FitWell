@@ -1,32 +1,38 @@
 <div class="conteiner-fluid position-relative" id="page">
-  <h2 (click)="Timer(card.restTimer)">{{timerValue}}</h2>
+  <div class="d-flex justify-content-between align-content-center pt-3 px-3 mb-2" id="head">
+  <div>
+      <button
+      type="button"
+      class="btn"
+      data-bs-toggle="modal"
+      data-bs-target="#ModifyCard"
+      *ngIf="!card?.coach"
+    >
+      Modify
+    </button>
+    <button type="button" class="btn ms-2" (click)="saveWorkout()">
+      Save Workout
+    </button>
+  </div>
+    <div><h2 (click)="Timer(card.restTimer)" class="m-0 timer">{{timerValue}}</h2></div>
+  </div>
   <div class="row p-0 m-0">
-    <div class="col-4" *ngFor="let item of card.workouts">
-      <div class="card" style="width: 18rem">
-        <div class="card-body" (click)="exerciseDetails(id, item.id)">
+    <div class="col-md-6 col-xxl-4 mb-2" *ngFor="let item of card?.workouts; let last = last">
+      <div class="card text-bg-dark" [ngStyle]="{'margin-bottom.px': last ? 75 : 0}">
+        <div class="card-body" (click)="exerciseDetails(id, item.id)" >
           <h5 class="card-title">{{ item.exercise.name }}</h5>
-          <ul class="list-group" *ngFor="let set of item.sets">
-            <li class="list-group-item">
-              Rep:{{ set.rep }} Weight:{{ set.weight }}
+          <ul class="list-group" >
+            <li class="list-group-item" *ngFor="let set of item.sets">
+              <div class="d-flex justify-content-between align-content-center">
+                <p class="m-0">Rep:{{ set.rep }}</p>
+                <p class="m-0">Weight:{{ set.weight | number:'1.2-2'}}</p>
+              </div>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-
-  <button
-    type="button"
-    class="btn btn-outline-info"
-    data-bs-toggle="modal"
-    data-bs-target="#ModifyCard"
-    *ngIf="!card.coach"
-  >
-    Modify
-  </button>
-  <button type="button" class="btn btn-outline-info" (click)="saveWorkout()">
-    Save Workout
-  </button>
 </div>
 
 <div
@@ -64,7 +70,7 @@
           <div class="accordion" id="Workout" class="mb-3">
             <div
               class="accordion-item"
-              *ngFor="let panel of card.workouts; let i = index"
+              *ngFor="let panel of card?.workouts; let i = index"
             >
               <h2 class="accordion-header">
                 <button
