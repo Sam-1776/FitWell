@@ -1,73 +1,163 @@
-#page{
-    background-color: #f1f8fa;
+#page {
+  background-color: #f1f8fa;
+  width: 100%;
+  min-height: 100vh;
+
+  .row {
+    #data {
+      background-color: #1e1e21;
+      width: 90%;
+      border-radius: 15px;
+
+      h1 {
+        font-family: sans-serif;
+        color: #f1f8fa;
+      }
+
+      p {
+        font-family: sans-serif;
+        color: #f1f8fa;
+      }
+    }
+
+    #anam {
+      width: 90%;
+      border-radius: 15px;
+      color: #f1f8fa;
+      .row {
+        #weight {
+          background-color: #1e1e21;
+          border-radius: 15px;
+        }
+      }
+
+      p {
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  #calendar {
+    background-color: #1e1e21;
     width: 100%;
-
-    .row{
-        #data{
-            background-color: #1e1e21;
-            width: 90%;
-            border-radius: 15px;
-
-            h1{
-                font-family: sans-serif;
-                color: #f1f8fa;
-            }
-
-            p{
-                font-family: sans-serif;
-                color: #f1f8fa;
-            }
-        }
-
-        #anam{
-            width: 90%;
-            border-radius: 15px;
-            color: #f1f8fa;
-            .row{
-                #weight{
-                    background-color: #1e1e21;
-                    border-radius: 15px;
-                }
-            }
-        }
+    .weekly-calendar {
+      width: 95%;
+      border-collapse: collapse;
+      margin-inline: auto;
     }
 
-    #calendar{
+    .weekly-calendar th,
+    .weekly-calendar td {
+      border: 1px solid #f1f8fa;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .today-name {
+      color: rgb(
+        0,
+        255,
+        64
+      ); /* Cambia il colore del testo per il giorno odierno */
+    }
+  }
+
+  #stats {
+    .row {
+      #workout {
         background-color: #1e1e21;
-        width: 100%;
-        .weekly-calendar {
-            width: 95%;
-            border-collapse: collapse;
-            margin-inline: auto; 
-          }
-          
-          .weekly-calendar th, .weekly-calendar td {
-            border: 1px solid #f1f8fa;
-            padding: 10px;
-            text-align: center;
-          }
-          
-          .today-name {
-            color: rgb(0, 255, 64); /* Cambia il colore del testo per il giorno odierno */
-          }
+        border-radius: 20px;
+        #statsWorkout {
+          width: 100%;
+        }
+      }
+      #diet {
+        background-color: #1e1e21;
+        border-radius: 20px;
+        #statsDiet {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #data {
+    .h1 {
+      font-size: 1.5rem;
     }
 
-    #stats{
-        .row{
-            #workout{
-                background-color: #1e1e21;
-                border-radius: 20px;
-                #statsWorkout{
-                    width: 100%;
-                }
-            }
-            #diet{
-                background-color: #1e1e21;
-                border-radius: 20px;
-                #statsDiet{
-                    width: 100%;
-                }
-            }
-        }
+    p {
+      font-size: 0.8rem;
     }
+  }
+
+  #stats {
+    .row {
+      .col-5 {
+        flex: 0 0 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 550px) {
+  h4 {
+    display: none;
+  }
+  #data {
+    .h1 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.8rem;
+    }
+  }
+
+  
+
+  #stats {
+    .row {
+      #workout {
+        margin-bottom: 20px;
+      }
+      #diet {
+        margin-bottom: 75px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 580px) {
+  #anam {
+    h4 {
+      display: none;
+    }
+    
+  }
+}
+@media screen and (max-width: 600px) {
+  #anam {
+    #bmr{
+      margin-left: 3px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  #anam {
+    p {
+      font-size: 2rem;
+    }
+  }
+
+  #stats {
+    .row {
+      #workout {
+        margin-bottom: 20px;
+      }
+    }
+  }
 }

@@ -13,7 +13,7 @@
             <div class="p-3 d-flex alig align-items-center">
               <i class="fas fa-weight fa-3x"></i>
               <div class="d-flex flex-column ms-3">
-                <h4 class="m-0">Weight</h4>
+                <h4 class="m-0 d-sm-none d-lg-block">Weight</h4>
                 <p class="m-0">{{ user.noteBookD.weight }}</p>
               </div>
             </div>
@@ -23,8 +23,8 @@
           <div id="weight">
             <div class="p-3 d-flex alig align-items-center">
               <i class="fas fa-fire fa-3x"></i>
-              <div class="d-flex flex-column ms-3">
-                <h4 class="m-0">BMR</h4>
+              <div id="bmr" class="d-flex flex-column ms-3">
+                <h4 class="m-0 d-sm-none d-lg-block">BMR</h4>
                 <p class="m-0">{{ user.noteBookD.rmr }}</p>
               </div>
             </div>
@@ -35,7 +35,7 @@
             <div class="p-3 d-flex alig align-items-center">
               <i class="fas fa-clipboard fa-3x"></i>
               <div class="d-flex flex-column ms-3">
-                <h4 class="m-0">Workouts card</h4>
+                <h4 class="m-0 d-sm-none d-lg-block">Card</h4>
                 <p class="m-0">{{ cardWorkout.length }}</p>
               </div>
             </div>
@@ -45,14 +45,35 @@
     </div>
   </div>
 
-  <div class="container-fluid p-0 mx-0 my-3 text-light pb-2" id="calendar">
-    <h4 class="m-3 display-6">Calendar</h4>
-    <table class="weekly-calendar mb-3">
+  <div class="container-fluid p-0 mx-0 my-3 text-light py-2" id="calendar">
+    <table class="weekly-calendar my-3" *ngIf="isMobile && MyDiet && day">
+      <thead>
+        <tr>
+          <th [class.today]="day.isToday" [class]="day.borderClass">
+            <span [class]="day.name === today ? 'today-name' : ''">{{ day.name }}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td [class.today]="day.isToday" [class]="day.borderClass">
+            <ul class="list-group mb-2" (click)="changePageDiet(day.diet?.id)" >
+              <li class="list-group-item" *ngFor="let recipe of day.diet?.recipes">{{ recipe?.name }}</li>
+            </ul>
+            <ul class="list-group" (click)="changePageWorkout(day.workout.id)" *ngIf="day.workout">
+              <li class="list-group-item">{{ day.workout.name }}</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="weekly-calendar my-3" *ngIf="!isMobile">
       <thead>
         <tr>
           <th
-            *ngFor="let day of days.slice(0,7)"
-            [class.today]="day.isToday"
+            *ngFor="let day of days?.slice(0,7)"
+            [class.today]="day.isToday  && isMobile"
             [class]="day.borderClass"
           >
             <span [class]="day.name === today ? 'today-name' : ''">{{
@@ -64,14 +85,14 @@
       <tbody>
         <tr>
           <td
-            *ngFor="let day of days.slice(0,7)"
+            *ngFor="let day of days?.slice(0,7)"
             [class.today]="day.isToday"
             [class]="day.borderClass"
           >
-            <ul class="list-group mb-2" (click)="changePageDiet(day.diet.id)">
+            <ul class="list-group mb-2" (click)="changePageDiet(day.diet?.id)">
               <li
                 class="list-group-item"
-                *ngFor="let recipe of day.diet.recipes"
+                *ngFor="let recipe of day.diet?.recipes"
               >
                 {{ recipe?.name }}
               </li>
@@ -89,7 +110,12 @@
 
   <div class="container-fluid mx-0 mt-3 pb-4" id="stats">
     <div class="row justify-content-around">
-      <div class="col-5" id="workout">
+      <div class="col-sm-11 col-lg-5" id="workout" *ngIf="cardWorkout && cardWorkout.length === 0">
+        <div>
+          <canvas id="statsNW" class="m-3"></canvas>
+        </div>
+      </div>
+      <div class="col-sm-11 col-lg-5" id="workout" *ngIf="cardWorkout.length > 0">
         <div
           id="carouselworkout"
           class="carousel slide"
@@ -125,7 +151,7 @@
           </button>
         </div>
       </div>
-      <div class="col-5" id="diet">
+      <div class="col-sm-11 col-lg-5" id="diet">
         <div>
           <canvas id="statsDiet" class="m-3"></canvas>
         </div>

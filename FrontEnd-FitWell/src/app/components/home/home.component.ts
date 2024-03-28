@@ -4,6 +4,8 @@ import {
   ViewChildren,
   QueryList,
   ElementRef,
+  AfterViewInit,
+  HostListener,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
@@ -24,15 +26,22 @@ Chart.register(...registerables);
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit  {
   user!: User;
   days!: {
     name: string;
     isToday: boolean;
     borderClass: string;
     workout?: CardWorkout;
-    diet: Diet;
+    diet?: Diet;
   }[];
+  day!: {
+    name: string;
+    isToday: boolean;
+    borderClass: string;
+    workout?: CardWorkout;
+    diet?: Diet;
+  };
   today!: string;
   rep: number[] = [];
   weight: number[] = [];
@@ -42,6 +51,7 @@ export class HomeComponent implements OnInit {
     ElementRef<HTMLCanvasElement>
   >;
   MyDiet!: Diet[];
+  isMobile: boolean = false;
 
   constructor(
     private userSrv: UserService,
@@ -55,7 +65,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
-    this.fillCalendar();
+    this.cardWorkout = []; 
+    this.checkIfMobile();
+  }
+  ngAfterViewInit(): void {
+    if (this.cardWorkout && this.cardWorkout.length === 0) {
+      this.getStatsNW();
+    }
   }
 
   getUser() {
@@ -63,36 +79,61 @@ export class HomeComponent implements OnInit {
       this.user = utente;
       console.log(this.user);
       this.getStatsD();
+      this.fillCalendar();
     });
   }
 
-  fillCalendar() {
-    this.getCardWorkoutAndDiet();
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkIfMobile(); // Controlla ogni volta che la finestra viene ridimensionata
   }
 
-  getCardWorkoutAndDiet() {
+  private checkIfMobile() {
+    this.isMobile = window.innerWidth <= 1200; // Imposta isMobile a true se la larghezza è <= 768 pixel
+  }
+
+  fillCalendar() {
+    if (this.user?.role.includes('NUTRITIONIST')) {
+      this.getCardWorkoutAndDiet('N');
+    } else if(this.user?.role.includes('COACH')) {
+      this.getCardWorkoutAndDiet('C');
+    } else{
+      this.getCardWorkoutAndDiet();
+    }
+  }
+
+  getCardWorkoutAndDiet(roleSuffix: string = '') {
+    const dietObservable = roleSuffix === 'N' ? this.dietSrv.getNutritionistDiet() : this.dietSrv.getAllDiet();
+    const cardObservabele = roleSuffix === 'C' ? this.cardSrv.getCardCoach() : this.cardSrv.getCardWorkout()
     forkJoin([
-      this.cardSrv.getCardWorkout(),
-      this.dietSrv.getAllDiet(),
+      cardObservabele,
+      dietObservable,
     ]).subscribe(([cardWorkoutData, dietData]) => {
       this.cardWorkout = cardWorkoutData;
+
       console.log(this.cardWorkout);
       this.renderStatsCarousel();
 
       this.MyDiet = dietData;
-      console.log(this.MyDiet[1].rmr);
 
       this.days = this.generateMonthDays();
       this.today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+      this.days.forEach(day => {
+        if (day.name === this.today) {
+          this.day = day;
+          console.log(this.day);
+          
+        }
+      })
+
     });
   }
-
   generateMonthDays(): {
     name: string;
     isToday: boolean;
     borderClass: string;
     workout?: CardWorkout;
-    diet: Diet;
+    diet?: Diet;
   }[] {
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -107,7 +148,7 @@ export class HomeComponent implements OnInit {
       isToday: boolean;
       borderClass: string;
       workout?: CardWorkout;
-      diet: Diet;
+      diet?: Diet;
     }[] = [];
     let dietIndex = 0;
 
@@ -140,12 +181,17 @@ export class HomeComponent implements OnInit {
         case 4:
         case 5:
         case 6:
+          if ([0, 1, 3, 4].includes(i)) {
+            const workoutIndex = [0, 1, 3, 4].indexOf(i);
+            assignedWorkout = this.cardWorkout[workoutIndex];
+          }
+          break;
         case 7:
         case 8:
         case 9:
         case 10:
-          if ([0, 1, 3, 4].includes(i)) {
-            const workoutIndex = [0, 1, 3, 4].indexOf(i);
+          if ([0, 1, 2, 3, 4].includes(i)) {
+            const workoutIndex = [0, 1, 2, 3, 4].indexOf(i);
             assignedWorkout = this.cardWorkout[workoutIndex];
           }
           break;
@@ -189,6 +235,36 @@ export class HomeComponent implements OnInit {
       },
     });
   }
+
+ getStatsNW(){
+  new Chart('statsNW', {
+    type: 'line',
+    data: {
+      labels: [0],
+      datasets: [{
+        label: 'Rep',
+        data: [0],
+        borderWidth: 1,
+        borderColor: 'rgb(0, 255, 64)',
+        backgroundColor: 'rgb(0, 255, 64)',
+      },
+      {
+        label: 'Weight',
+        data: [0],
+        borderWidth: 1,
+        borderColor: '#f1f8fa',
+        backgroundColor: '#f1f8fa',
+      },]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+ }
 
   async renderStatsCarousel() {
     for (const workout of this.cardWorkout) {
@@ -275,7 +351,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  changePageDiet(id: string) {
+  changePageDiet(id?: string) {
     this.router.navigate(['/dietDetails/', id]);
   }
   changePageWorkout(id?: string) {
