@@ -10,7 +10,7 @@
     >
       Modify
     </button>
-    <button type="button" class="btn ms-2" (click)="saveWorkout()">
+    <button type="button" class="btn ms-2" (click)="saveWorkout()" *ngIf="card?.coach?.id != user?.id">
       Save Workout
     </button>
   </div>

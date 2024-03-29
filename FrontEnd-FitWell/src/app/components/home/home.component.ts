@@ -186,10 +186,7 @@ export class HomeComponent implements OnInit, AfterViewInit  {
             assignedWorkout = this.cardWorkout[workoutIndex];
           }
           break;
-        case 7:
-        case 8:
-        case 9:
-        case 10:
+        default:
           if ([0, 1, 2, 3, 4].includes(i)) {
             const workoutIndex = [0, 1, 2, 3, 4].indexOf(i);
             assignedWorkout = this.cardWorkout[workoutIndex];
