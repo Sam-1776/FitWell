@@ -21,6 +21,7 @@ import sameuelesimeone.FitWell.models.Role;
 import sameuelesimeone.FitWell.models.User;
 import sameuelesimeone.FitWell.models.Workout;
 
+import java.security.cert.CertificateRevokedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -151,11 +152,13 @@ public class CardWorkoutService {
                 workouts.getSets().forEach(setDAO::delete);
                 workoutDAO.delete(workouts);
             });
-
-            List<StatW> stats = statWDAO.findByCardWorkout(card);
-            stats.forEach(statWDAO::delete);
+                List<StatW> stats = statWDAO.findByCardWorkout(card);
+                if(!stats.isEmpty()){
+                    stats.forEach(statWDAO::delete);
+                }
 
             cardWorkoutDAO.delete(card);
+
         } else {
             throw new UnauthorizedExeption("You can't delete this workout");
         }

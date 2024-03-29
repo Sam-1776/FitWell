@@ -22,7 +22,6 @@
                   {{ item.nutritionist.name}} {{item.nutritionist.surname}}
                 </h6>
               </div>
-              <button type="button" class="btn btn-outline-danger" *ngIf="!item.nutritionist"><i class="bi bi-trash"></i></button>
             </div>
           </div>
           <div class="card-body" (click)="changePage(item.id)">
