@@ -8,9 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sameuelesimeone.FitWell.config.MailgunSender;
-import sameuelesimeone.FitWell.dao.CardWorkoutDAO;
-import sameuelesimeone.FitWell.dao.UserDAO;
-import sameuelesimeone.FitWell.dao.WorkoutDAO;
+import sameuelesimeone.FitWell.dao.*;
 import sameuelesimeone.FitWell.dto.CardWorkoutDTO;
 import sameuelesimeone.FitWell.dto.GenerateCardDTO;
 import sameuelesimeone.FitWell.dto.MailRequestCoachDTO;
@@ -18,10 +16,12 @@ import sameuelesimeone.FitWell.exceptions.BadRequestException;
 import sameuelesimeone.FitWell.exceptions.NotFoundException;
 import sameuelesimeone.FitWell.exceptions.UnauthorizedExeption;
 import sameuelesimeone.FitWell.models.CardWorkout;
+import sameuelesimeone.FitWell.models.NoteBook.StatW;
 import sameuelesimeone.FitWell.models.Role;
 import sameuelesimeone.FitWell.models.User;
 import sameuelesimeone.FitWell.models.Workout;
 
+import java.security.cert.CertificateRevokedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +38,12 @@ public class CardWorkoutService {
 
     @Autowired
     WorkoutDAO workoutDAO;
+
+    @Autowired
+    SetDAO setDAO;
+
+    @Autowired
+    StatWDAO statWDAO;
 
     @Autowired
     UserService userService;
@@ -135,20 +141,26 @@ public class CardWorkoutService {
         return card;
     }
 
-    public void deleteCard(UUID cardId, User user){
+    public void deleteCard(UUID cardId, User user) {
         CardWorkout card = this.findById(cardId);
-        if (user.getRole().size() == 1 && card.getUser().getId().equals(user.getId())){
+        boolean isAdmin = user.getRole().contains(Role.ADMIN);
+        boolean isCoach = user.getRole().contains(Role.COACH) && card.getCoach().getId().equals(user.getId());
+        boolean isOwner = user.getRole().size() == 1 && card.getUser().getId().equals(user.getId());
+
+        if (isOwner || isAdmin || isCoach) {
+            card.getWorkouts().forEach(workouts -> {
+                workouts.getSets().forEach(setDAO::delete);
+                workoutDAO.delete(workouts);
+            });
+                List<StatW> stats = statWDAO.findByCardWorkout(card);
+                if(!stats.isEmpty()){
+                    stats.forEach(statWDAO::delete);
+                }
+
             cardWorkoutDAO.delete(card);
-        }else if (user.getRole().size() == 1 ){
+
+        } else {
             throw new UnauthorizedExeption("You can't delete this workout");
-        }else {
-            if (user.getRole().get(1).equals(Role.ADMIN)) {
-                cardWorkoutDAO.delete(card);
-            } else if (user.getRole().get(1).equals(Role.COACH) && card.getCoach().getId().equals(user.getId())) {
-                cardWorkoutDAO.delete(card);
-            } else {
-                throw new UnauthorizedExeption("You can't delete this workout");
-            }
         }
     }
 

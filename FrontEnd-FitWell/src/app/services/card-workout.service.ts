@@ -53,4 +53,8 @@ export class CardWorkoutService {
   }){
     return this.http.patch<CardWorkout>(`${this.cardUrl}/${id}`,data)
   }
+
+  deleteCard(id: string){
+    return this.http.delete(`${this.cardUrl}/${id}`);
+  }
 }

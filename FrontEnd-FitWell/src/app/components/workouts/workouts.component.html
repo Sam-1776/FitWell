@@ -1,32 +1,8 @@
-<div class="conteiner-fluid position-relative" id="page">
-  <div class="row">
-    <div class="col-4" *ngFor="let item of cardWorkout">
-      <div class="card" style="width: 18rem" (click)="changePage(item.id)">
-        <div class="card-body">
-          <h5 class="card-title">{{ item.name }}</h5>
-          <h6 class="card-subtitle mb-2 text-body-secondary">
-            <i class="bi bi-stopwatch"></i> {{ item.restTimer }}
-          </h6>
-          <ul class="list-group" *ngFor="let workout of item.workouts">
-            <li class="list-group-item">{{ workout.exercise.name }}</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="position-absolute" id="addCard">
+<div class="conteiner-fluid" id="page">
+  <div class="d-grid gap-2 d-flex justify-content-end mb-3 pt-3 pe-2" id="addCard">
     <button
       type="button"
-      class="btn btn-success"
-      data-bs-toggle="modal"
-      data-bs-target="#generateCard"
-    >
-      Generate
-    </button>
-    <button
-      type="button"
-      class="btn btn-success ms-2"
+      class="btn"
       data-bs-toggle="modal"
       data-bs-target="#RequestCard"
     >
@@ -34,12 +10,46 @@
     </button>
     <button
       type="button"
-      class="btn btn-success ms-2"
+      class="btn"
+      data-bs-toggle="modal"
+      data-bs-target="#generateCard"
+    >
+      Generate
+    </button>
+    <button
+      type="button"
+      class="btn"
       data-bs-toggle="modal"
       data-bs-target="#addCardWorkout"
     >
-      Add
+    <i class="bi bi-plus-lg"></i>
     </button>
+  </div>
+
+  <div class="row m-0">
+    <div class="col-md-6 col-xxl-2 mb-2" *ngFor="let item of cardWorkout; let last = last">
+      <div class="card text-bg-dark" [ngStyle]="{'margin-bottom.px': last ? 75 : 0}">
+        <div class="card-header pb-0">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="flex-grow-1" (click)="changePage(item.id)">
+              <h5 class="card-title" >{{ item.name }}</h5>
+              <h6 class="card-subtitle mb-2">
+                <i class="bi bi-stopwatch"></i> {{ item.restTimer }}
+              </h6>
+              <h6 class="card-subtitle " *ngIf="item.coach">
+                {{ item.coach.name }} {{ item.coach.surname }}
+              </h6>
+            </div>
+            <button type="button" class="btn btn-outline-danger" (click)="deleteCard(item.id)" *ngIf="!item.coach"><i class="bi bi-trash"></i></button> 
+          </div>
+        </div>
+        <div class="card-body" (click)="changePage(item.id)">
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let workout of item.workouts">{{ workout.exercise.name }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div
@@ -156,7 +166,9 @@
   <div class="modal-dialog">
     <div class="modal-content text-bg-dark">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="addCardWorkoutLabel">Add New Card Workout</h1>
+        <h1 class="modal-title fs-5" id="addCardWorkoutLabel">
+          Add New Card Workout
+        </h1>
         <button
           type="button"
           class="btn-close"
@@ -175,15 +187,29 @@
               id="inputName"
               formControlName="name"
             />
-          </div>  
+          </div>
           <div class="accordion" id="Workout" class="mb-3">
-            <div class="accordion-item" *ngFor="let panel of panels; let i = index">
+            <div
+              class="accordion-item"
+              *ngFor="let panel of panels; let i = index"
+            >
               <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#Workoutcollapse' + i" aria-expanded="true" [attr.aria-controls]="'collapse' + i">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#Workoutcollapse' + i"
+                  aria-expanded="true"
+                  [attr.aria-controls]="'collapse' + i"
+                >
                   Workout #{{ panel }}
                 </button>
               </h2>
-              <div [id]="'Workoutcollapse' + i" class="accordion-collapse collapse show" data-bs-parent="#Workout">
+              <div
+                [id]="'Workoutcollapse' + i"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#Workout"
+              >
                 <div class="accordion-body">
                   <ng-container>
                     <app-workout></app-workout>
@@ -202,81 +228,78 @@
               formControlName="restTimer"
               min="1"
             />
-          </div>   
+          </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-light" (click)="addPanel()">Add Exercise</button>
-            <button type="submit" class="btn btn-success">Save card</button>
+            <button
+              type="button"
+              class="btn btn-outline-light"
+              (click)="addPanel()"
+            >
+              Add Exercise
+            </button>
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Save card</button>
           </div>
         </form>
       </div>
-      
     </div>
   </div>
 </div>
-
 
 <div
-class="modal fade"
-id="RequestCard"
-tabindex="-1"
-aria-labelledby="RequestCardLabel"
-aria-hidden="true"
+  class="modal fade"
+  id="RequestCard"
+  tabindex="-1"
+  aria-labelledby="RequestCardLabel"
+  aria-hidden="true"
 >
-<div class="modal-dialog">
-  <div class="modal-content text-bg-dark">
-    <div class="modal-header">
-      <h1 class="modal-title fs-5" id="RequestCardLabel">Request Create Card</h1>
-      <button
-        type="button"
-        class="btn-close text-light"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="modal-body">
-      <form [formGroup]="RequestCard" (ngSubmit)="sandRequest()">
-        <div class="mb-3">
-          <label for="function" class="form-label">Function: </label>
-          <select
-            class="form-select"
-            aria-label="Default select example"
-            id="function"
-            name="function"
-            formControlName="function"
-          >
-            <option value="" disabled selected>Select Function</option>
-            <option value="create">
-              Create
-            </option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="coachId" class="form-label">Coach: </label>
-          <select
-            class="form-select"
-            aria-label="Default select example"
-            id="inputcoachId"
-            name="coachId"
-            formControlName="coachId"
-          >
-            <option value="" disabled selected>Search User</option>
-            <option value="{{ user.id }}" *ngFor="let user of userFoundCoach">
-              {{ user.name }} {{ user.surname }}
-            </option>
-          </select>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content text-bg-dark">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="RequestCardLabel">
+          Request Create Card
+        </h1>
         <button
-          type="submit"
-          class="btn btn-success"
+          type="button"
+          class="btn-close text-light"
           data-bs-dismiss="modal"
-        >
-          Confirm
-        </button>
-      </form>
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="RequestCard" (ngSubmit)="sandRequest()">
+          <div class="mb-3">
+            <label for="function" class="form-label">Function: </label>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              id="function"
+              name="function"
+              formControlName="function"
+            >
+              <option value="" disabled selected>Select Function</option>
+              <option value="create">Create</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="coachId" class="form-label">Coach: </label>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              id="inputcoachId"
+              name="coachId"
+              formControlName="coachId"
+            >
+              <option value="" disabled selected>Search User</option>
+              <option value="{{ user.id }}" *ngFor="let user of userFoundCoach">
+                {{ user.name }} {{ user.surname }}
+              </option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success" data-bs-dismiss="modal">
+            Confirm
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
-</div>
-
-
-

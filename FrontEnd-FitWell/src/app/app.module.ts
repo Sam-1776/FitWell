@@ -64,7 +64,7 @@ const routes: Route[] = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'exDetails/:id',
+    path: 'exDetails/:cardId/:id',
     component: DetailsExerciseComponent,
     canActivate: [AuthGuard],
   },

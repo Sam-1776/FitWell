@@ -23,6 +23,6 @@
         />
       </div>
       <button type="submit" class="btn btn-success" *ngIf="!id || setId == '0' " >Save set</button>
-      <button type="button" class="btn btn-info" (click)="modSet()">Mod set</button>
+      <button type="button" class="btn btn-success" (click)="modSet()" *ngIf="id">Mod set</button>
     </form> 
 </div>  

@@ -1,20 +1,40 @@
-<div class="conteiner-fluid position-relative" id="page">
-  <div class="row m-0">
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of ingredients">
-        {{ item.name }}
-      </li>
-    </ul>
+<div class="conteiner-fluid" id="page">
+  <div class="d-grid gap-2 d-flex justify-content-end mb-2 pt-3 pe-2" id="addCard">
+    <div>
+      <button
+      type="button"
+      class="btn"
+      data-bs-toggle="modal"
+      data-bs-target="#updateDiet"
+    >
+      Save Update
+    </button>
+    </div>
   </div>
-  <button
-    type="button"
-    class="btn btn-outline-info"
-    data-bs-toggle="modal"
-    data-bs-target="#updateDiet"
-  >
-    Save Update
-  </button>
+  
+  <div class="row m-0">
+    <div class="col-md-6 col-xxl-2 mb-2" *ngFor="let ingredient of recipe">
+      <div class="card text-bg-dark">
+        <div class="card-body">
+          <h5 class="card-title">{{ ingredient.name }}</h5>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let item of ingredient.ingredients">
+              {{ item.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-md-end justify-content-center" id="info">
+    <div id="nutrient">
+      <canvas id="Macro" class="mx-3 mb-3"></canvas>
+    </div>
+  </div>
+  
 </div>
+
 
 
 <div
@@ -27,9 +47,7 @@
   <div class="modal-dialog">
     <div class="modal-content text-bg-dark">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="updateDietlabel">
-          Mod Card Workout
-        </h1>
+        <h1 class="modal-title fs-5" id="updateDietlabel">Mod Card Workout</h1>
         <button
           type="button"
           class="btn-close"

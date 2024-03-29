@@ -1,5 +1,10 @@
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthData } from 'src/app/auth/auth-data';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -19,7 +24,6 @@ import { WorkoutService } from 'src/app/services/workout.service';
   styleUrls: ['./workouts.component.scss'],
 })
 export class WorkoutsComponent implements OnInit, DoCheck {
-  
   cardWorkout!: CardWorkout[];
   generateCard!: FormGroup;
   AddCardForm!: FormGroup;
@@ -33,7 +37,7 @@ export class WorkoutsComponent implements OnInit, DoCheck {
   userFoundCoach: User[] = [];
   coach: string = 'COACH';
 
-  RequestCard!: FormGroup
+  RequestCard!: FormGroup;
 
   constructor(
     private cardSrv: CardWorkoutService,
@@ -46,11 +50,11 @@ export class WorkoutsComponent implements OnInit, DoCheck {
   ) {}
   ngDoCheck(): void {
     this.muscle = this.generateCard.controls['partMuscle'].value;
-    this.workoutSrv.workoutId.forEach(el =>{
+    this.workoutSrv.workoutId.forEach((el) => {
       if (!this.workoutsId.includes(el)) {
         this.workoutsId.push(el);
       }
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -64,35 +68,35 @@ export class WorkoutsComponent implements OnInit, DoCheck {
     this.AddCardForm = this.fb.group({
       name: [null, Validators.required],
       workoutsId: [null],
-      restTimer:[null],
+      restTimer: [null],
       user_id: [null],
-      coach_id: [null]
-    })
+      coach_id: [null],
+    });
     this.RequestCard = this.fb.group({
       coachId: [null],
-      function: [null]
-    })
+      function: [null],
+    });
     this.getUser();
     if (this.user?.role.includes('COACH')) {
       this.getCardCoach();
-    }else{
+    } else {
       this.getCardWorkout();
     }
-    this.takeCoach()
+    this.takeCoach();
   }
 
   addPanel() {
     this.panels.push(this.panels.length + 1);
   }
-  takeCoach(){
-    this.userSrv.getAllUser().subscribe(el =>{
-      el.forEach(userF => {
-        if(userF.role.includes('COACH')){
+  takeCoach() {
+    this.userSrv.getAllUser().subscribe((el) => {
+      el.forEach((userF) => {
+        if (userF.role.includes('COACH')) {
           this.userFoundCoach.push(userF);
         }
-      })
+      });
       console.log(el);
-    })
+    });
   }
 
   getCardWorkout() {
@@ -102,11 +106,11 @@ export class WorkoutsComponent implements OnInit, DoCheck {
     });
   }
 
-  getCardCoach(){
-    this.cardSrv.getCardCoach().subscribe((el: CardWorkout[]) =>{
+  getCardCoach() {
+    this.cardSrv.getCardCoach().subscribe((el: CardWorkout[]) => {
       this.cardWorkout = el;
       console.log(this.cardWorkout);
-    })
+    });
   }
 
   generate() {
@@ -118,20 +122,21 @@ export class WorkoutsComponent implements OnInit, DoCheck {
       weight: this.generateCard.controls['weight'].value,
     };
     try {
-      this.cardSrv.generateAutoCard(data).subscribe();
+      this.cardSrv.generateAutoCard(data).subscribe(() => {
+        this.router.navigate(['/workout']);
+      });
     } catch (err) {
       console.log(err);
     }
   }
 
-  getUser(){
+  getUser() {
     this.authSrv.user$.subscribe((user) => {
       this.user = user;
     });
   }
 
-
-  savenewCard(){
+  savenewCard() {
     const data = {
       name: this.AddCardForm.controls['name'].value,
       workouts_id: this.workoutsId,
@@ -139,32 +144,43 @@ export class WorkoutsComponent implements OnInit, DoCheck {
     };
 
     console.log(data);
-    try{
-      this.cardSrv.saveNewCard(data).subscribe();
-    }catch(err){
+    try {
+      this.cardSrv.saveNewCard(data).subscribe(() => {
+        this.router.navigate(['/workout']);
+      });
+    } catch (err) {
       console.log(err);
-    }finally{
+    } finally {
       this.workoutSrv.workoutId = [];
       this.workoutsId = [];
     }
-    
   }
 
-  changePage(id: string){
-    this.router.navigate(['/details/',id]);
+  changePage(id: string) {
+    this.router.navigate(['/details/', id]);
   }
 
-  sandRequest(){
+  sandRequest() {
     const data = {
       coachId: this.RequestCard.controls['coachId'].value,
-      function: this.RequestCard.controls['function'].value
-    }
-    try{
-      this.requestSrv.sendRequestCreateCard(data).subscribe()
-    }catch(err){
+      function: this.RequestCard.controls['function'].value,
+    };
+    try {
+      this.requestSrv.sendRequestCreateCard(data).subscribe(() => {
+        this.router.navigate(['/workout']);
+      });
+    } catch (err) {
       console.log(err);
     }
   }
 
-
+  deleteCard(id: string) {
+    try {
+      this.cardSrv.deleteCard(id).subscribe(() => {
+        this.router.navigate(['/workout']);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

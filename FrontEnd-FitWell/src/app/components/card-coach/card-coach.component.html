@@ -1,27 +1,30 @@
 <div class="conteiner-fluid position-relative" id="page">
-    <div class="row">
-      <div class="col-4" *ngFor="let item of cardWorkout">
-        <div class="card" style="width: 18rem" (click)="changePage(item.id)">
+  <div class="d-grid gap-2 d-flex justify-content-end mb-3 pt-3 pe-2" id="addCard">
+    <button
+    type="button"
+    class="btn ms-2"
+    data-bs-toggle="modal"
+    data-bs-target="#addCardWorkout"
+  >
+  <i class="bi bi-plus-lg"></i>
+  </button>
+  </div>
+    <div class="row m-0 ">
+      <div class="col-md-6 col-xxl-2 mb-2" *ngFor="let item of cardWorkout">
+        <div class="card text-bg-dark" (click)="changePage(item.id)">
           <div class="card-body">
             <h5 class="card-title">{{ item.name }}</h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">
+            <h6 class="card-subtitle mb-2">
               <i class="bi bi-stopwatch"></i> {{ item.restTimer }}
             </h6>
-            <ul class="list-group" *ngFor="let workout of item.workouts">
-              <li class="list-group-item">{{ workout.exercise.name }}</li>
+            <ul class="list-group">
+              <li class="list-group-item" *ngFor="let workout of item.workouts">{{ workout.exercise.name }}</li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-    <button
-      type="button"
-      class="btn btn-success ms-2"
-      data-bs-toggle="modal"
-      data-bs-target="#addCardWorkout"
-    >
-      Add
-    </button>
+    
 </div>
 
 

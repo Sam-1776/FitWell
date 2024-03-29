@@ -1,22 +1,8 @@
 <div class="conteiner-fluid position-relative" id="page">
-  <div class="row">
-    <div class="col-4" *ngFor="let item of MyDiet">
-      <div class="card" style="width: 18rem">
-        <div class="card-body" (click)="changePage(item.id)">
-          <h5 class="card-title">Diet</h5>
-          <h6 class="card-subtitle mb-2 text-body-secondary">
-            Total calories: {{ item.totalCalories }}
-          </h6>
-          <ul class="list-group" *ngFor="let recipe of item.recipes">
-            <li class="list-group-item">{{ recipe.name }}</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  <button
+  <div class="d-grid gap-2 d-flex justify-content-end mb-3 pt-3 pe-2" id="addCard">
+    <button
     type="button"
-    class="btn btn-primary"
+    class="btn"
     data-bs-toggle="modal"
     data-bs-target="#DietGenerate"
   >
@@ -24,12 +10,28 @@
   </button>
   <button
     type="button"
-    class="btn btn-primary"
+    class="btn"
     data-bs-toggle="modal"
     data-bs-target="#addFood"
   >
     Add Food
   </button>
+  </div>
+  <div class="row m-0">
+    <div class="col-4" *ngFor="let item of MyDiet">
+      <div class="card text-bg-dark">
+        <div class="card-body" (click)="changePage(item.id)">
+          <h5 class="card-title">Diet</h5>
+          <h6 class="card-subtitle mb-2 ">
+            Total calories: {{ item.totalCalories }}
+          </h6>
+          <ul class="list-group" >
+            <li class="list-group-item" *ngFor="let recipe of item.recipes">{{ recipe.name }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div
@@ -142,7 +144,7 @@
   aria-hidden="true"
 >
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content text-bg-dark">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="DietGenerateLabel">Generate Diet</h1>
         <button
@@ -307,7 +309,7 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-outline-dark"
+              class="btn btn-outline-light"
               (click)="addPanelD()"
             >
               Add Recipe

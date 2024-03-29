@@ -37,4 +37,9 @@ public class StatController {
         return statWService.findByWorkout(cardId, user);
     }
 
+    @DeleteMapping("/{statsID}")
+    @PreAuthorize("hasAnyAuthority('USER', 'COACH')")
+    public void deleteStats(@PathVariable UUID statsID){
+        statWService.delete(statsID);
+    }
 }

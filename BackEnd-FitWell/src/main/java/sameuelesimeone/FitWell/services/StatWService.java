@@ -42,4 +42,9 @@ public class StatWService {
         }
         throw new UnauthorizedExeption("can't see stat of this cardWorkout");
     }
+
+    public void delete(UUID id){
+        StatW found = this.findById(id);
+        statWDAO.delete(found);
+    }
 }
