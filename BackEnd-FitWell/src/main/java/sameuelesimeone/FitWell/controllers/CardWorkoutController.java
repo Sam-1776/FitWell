@@ -71,6 +71,7 @@ public class CardWorkoutController {
     }
 
     @DeleteMapping("/{cardId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('USER', 'COACH', 'ADMIN')")
     public void deleteCard(@PathVariable UUID cardId, @AuthenticationPrincipal User currentUser){
         cardWorkoutService.deleteCard(cardId, currentUser);

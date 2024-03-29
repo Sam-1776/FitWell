@@ -42,8 +42,6 @@ public class Workout {
         return "Workout{" +
                 "id=" + id +
                 ", exercise=" + exercise.getName() +
-                ", sets=" + sets +
-                ", cardWorkout=" + cardWorkout +
-                '}';
+                ", sets=" + sets;
     }
 }
